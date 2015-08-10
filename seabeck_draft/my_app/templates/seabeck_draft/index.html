@@ -1,0 +1,19 @@
+<h1>Welcome, {{ family.user.first_name }} {{ family.user.last_name }}!</h1>
+
+{%  if families_list %}
+    <ul>
+    {%  for family in families_list %}
+        <li><a href="/detail/{{ family.id }}">{{ family }}</a>
+            phone: {{ family.phone }}
+            email: {{ family.user.email }}
+        <a href="/edit_family/{{ family.id }}">edit</a>
+
+        </li>
+
+    {%  endfor %}
+    </ul>
+{% else %}
+    <p>No one has registered. </p>
+{% endif %}
+
+<a href="new_family.html">New Registration</a>

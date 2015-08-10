@@ -1,0 +1,61 @@
+{% load staticfiles %}
+{% block title %}
+New Camper
+{% endblock %}
+
+{% block others %}
+<h1>Campers registered by {{ camper.family.first_name }} {{ camper.family.last_name }}</h1>
+
+<ul>
+    {% for indiv in camper.family.camper_set.all %}
+        {% if indiv != camper %}
+            <li>{{ indiv.first_name }} {{ indiv.last_name }} --
+                {% if indiv.under_18 == True %}
+                    Child
+                {%  else%}
+                    Adult
+                {% endif %}
+                --
+                {% for a in indiv.attendance_set.all %}
+                    {% if forloop.last %}
+                        {{ a.age_at_start }}
+                    {% endif %}
+                {% endfor %}
+                --
+                {% for a in indiv.food_preference_set.all %}
+
+                        {{ a.age_at_start }}
+                {% endfor %}
+
+            <a href="/edit_camper/{{ indiv.id }}">edit</a>
+
+        </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+
+{% endblock %}
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+
+    First name: <input value="{{ camper.first_name  }}" name="first_name" type="text">
+    Last name: <input value="{{ camper.last_name  }}" name="last_name" type="text">
+    <br>
+    Age: <select value="{{ camper.under_18 }}" name="under_18">
+        <option value="Null"></option>
+        <option value="False">Adult (18+)</option>
+        <option value="True">Child (under 18)</option>
+    </select>
+    Birth date: <input value="{{ camper.dob  }}" name="dob" type="date">
+    <br>
+    <input type="submit" value="SAVE"/>
+</form>
+
+{% endblock %}
+
+{% block last %}
+    <a href="/">Return to Families List</a>
+{% endblock %}

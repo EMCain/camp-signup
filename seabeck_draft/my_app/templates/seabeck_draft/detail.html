@@ -1,0 +1,42 @@
+{% extends "seabeck_draft/logged_in_base_template.html" %}
+
+
+
+
+{% block content %}
+    {% load staticfiles %}
+
+    <link rel='stylesheet' type="text/css" href='{% static "my_app/css/bootstrap-theme.css" %}'/>
+    <link rel='stylesheet' type="text/css" href='{% static "my_app/css/custom.css" %}'/>
+    <style>
+        #campers_of_family {
+            color: slategray;
+            font-style: italic;
+        }
+
+        div .active {
+            color: green;
+            font-weight: bold;
+            font-style: normal;
+        }
+
+
+
+    </style>
+
+
+    <h1>Hello, {{ family.user.first_name }} {{ family.user.last_name }}!</h1>
+    <h2>These are the campers you have signed up in the past.</h2>
+
+{#    This section will be filled in by the draw_detail script. #}
+    <div id="campers-list">
+        Loading campers...
+    </div>
+
+    <br><br>
+    <a href="/">Return to main page</a>
+
+    <script src='{% static "my_app/js/draw_detail.js" %}'></script>
+{#    call fetch here #}
+
+{% endblock %}
