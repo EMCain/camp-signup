@@ -1,0 +1,54 @@
+TODO
+
+updated 8/10/15
+
+
+TEMPLATES
+
+Edits:
+move calling of JS function on api_campers entirely to the Detail page, it's currently happening in the logged in template
+
+add  navbar with Profile and Logout buttons to header, right side (with breadcrumbs on left) -- try building in static html page example first, this could get complex
+dynamically generate breadcrumbs (not sure how)
+
+ADMINISTRATIVE AREA
+
+Create various levels of admin privileges
+
+Reports:
+Find out most important reports to create
+Create premade reporting functions for each of these
+optional/if time: implement custom reporting features
+
+Modifying data:
+Changing payment info based on offline payments (e.g. if someone sends in a check, or if their fee is waived for being a volunteer or speaker)
+Changing info for a given person if they request it
+Maybe have an upper level of admin who can add other admins, so I don't have to be in charge of it
+
+Webmaster management:
+Find out if there's a way I can create accounts and require them to change their password on first login? 
+
+
+USER FEATURES
+
+create user profile page (see below)
+add logout to every page
+
+
+
+PAGES
+
+Create views and templates for the family login area (profile, housing preferences, scholarship and discount page, payment page) and admin area (need to create full list still)
+
+Flesh out logged-in-template to include a better top bar, a side bar that includes the amount they owe
+
+
+JAVASCRIPT
+
+Major cleanup needed for draw-detail.js. Includes breaking down existing functions into multiple functions, turning repetitive code into for loops, and replacing raw HTML string outputs with createElement. 
+
+Add form validation and event listeners to every page 
+
+PAYMENT
+
+Learn about payment functions in Django

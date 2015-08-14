@@ -1,19 +1,124 @@
-<h1>Welcome, {{ family.user.first_name }} {{ family.user.last_name }}!</h1>
+{#<h1>Welcome, {{ family.user.first_name }} {{ family.user.last_name }}!</h1>#}
+{##}
+{#{%  if families_list %}#}
+{#    <ul>#}
+{#    {%  for family in families_list %}#}
+{#        <li><a href="/detail/{{ family.id }}">{{ family }}</a>#}
+{#            phone: {{ family.phone }}#}
+{#            email: {{ family.user.email }}#}
+{#        <a href="/edit_family/{{ family.id }}">edit</a>#}
+{##}
+{#        </li>#}
+{##}
+{#    {%  endfor %}#}
+{#    </ul>#}
+{#{% else %}#}
+{#    <p>No one has registered. </p>#}
+{#{% endif %}#}
+{##}
+{#<a href="new_family.html">New Registration</a>#}
 
-{%  if families_list %}
-    <ul>
-    {%  for family in families_list %}
-        <li><a href="/detail/{{ family.id }}">{{ family }}</a>
-            phone: {{ family.phone }}
-            email: {{ family.user.email }}
-        <a href="/edit_family/{{ family.id }}">edit</a>
 
-        </li>
+{% load staticfiles %}
+{% block title %}
+    Family Profile
+{% endblock %}
+{% block content %}
 
-    {%  endfor %}
-    </ul>
-{% else %}
-    <p>No one has registered. </p>
-{% endif %}
+    <form method="post">
+        {% csrf_token %}
 
-<a href="new_family.html">New Registration</a>
+        <h1>Family Profile</h1>
+
+        First name: <input value="{{ family.user.first_name }}" name="first_name" type="text">
+        Last name: <input value="{{ family.user.last_name }}" name="last_name" type="text">
+        <br>
+        Phone number: <input value="{{ family.phone }}" name="phone" type="text">
+        Email address: <input value="{{ family.user.email }}" name="email" type="text">
+        {#make sure if the email address changes it gets POSTed to the username as well#}
+
+        <br>
+
+        <h3>Address</h3>
+        Street: <input value="{{ family.street_address }}" name="street_address" type="text">
+        Apartment/suite:: <input value="{{ family.apt_no }}" name="apt_no" type="text">
+        City: <input value="{{ family.city }}" name="city" type="text">
+        State: <select value="{{ family.state }}" name="state">
+            <option value="AL">Alabama</option>
+            <option value="AK">Alaska</option>
+            <option value="AZ">Arizona</option>
+            <option value="AR">Arkansas</option>
+            <option value="CA">California</option>
+            <option value="CO">Colorado</option>
+            <option value="CT">Connecticut</option>
+            <option value="DE">Delaware</option>
+            <option value="DC">District Of Columbia</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="HI">Hawaii</option>
+            <option value="ID">Idaho</option>
+            <option value="IL">Illinois</option>
+            <option value="IN">Indiana</option>
+            <option value="IA">Iowa</option>
+            <option value="KS">Kansas</option>
+            <option value="KY">Kentucky</option>
+            <option value="LA">Louisiana</option>
+            <option value="ME">Maine</option>
+            <option value="MD">Maryland</option>
+            <option value="MA">Massachusetts</option>
+            <option value="MI">Michigan</option>
+            <option value="MN">Minnesota</option>
+            <option value="MS">Mississippi</option>
+            <option value="MO">Missouri</option>
+            <option value="MT">Montana</option>
+            <option value="NE">Nebraska</option>
+            <option value="NV">Nevada</option>
+            <option value="NH">New Hampshire</option>
+            <option value="NJ">New Jersey</option>
+            <option value="NM">New Mexico</option>
+            <option value="NY">New York</option>
+            <option value="NC">North Carolina</option>
+            <option value="ND">North Dakota</option>
+            <option value="OH">Ohio</option>
+            <option value="OK">Oklahoma</option>
+            <option value="OR">Oregon</option>
+            <option value="PA">Pennsylvania</option>
+            <option value="RI">Rhode Island</option>
+            <option value="SC">South Carolina</option>
+            <option value="SD">South Dakota</option>
+            <option value="TN">Tennessee</option>
+            <option value="TX">Texas</option>
+            <option value="UT">Utah</option>
+            <option value="VT">Vermont</option>
+            <option value="VA">Virginia</option>
+            <option value="WA">Washington</option>
+            <option value="WV">West Virginia</option>
+            <option value="WI">Wisconsin</option>
+            <option value="WY">Wyoming</option>
+        </select>
+        Zip: <input value="{{ family.zip_code }}" name="zip_code" type="text">
+        <br>
+
+        <h2>Emergency Contacts</h2>
+
+        <h3>Primary (required)</h3>
+        First Name: <input value="{{ family.ec_1_first }}" name="ec_1_first" type="text">
+        Last Name: <input value="{{ family.ec_1_last }}" name="ec_1_last" type="text">
+        Phone: <input value="{{ family.ec_1_phone }}" name="ec_1_phone" type="text">
+        Relationship: <input value="{{ family.ec_1_relation }}" name="ec_1_relation" type="text">
+
+        <br>
+
+        <h3>Secondary (Optional)</h3>
+        First Name: <input value="{{ family.ec_2_first }}" name="ec_2_first" type="text">
+        Last Name: <input value="{{ family.ec_2_last }}" name="ec_2_last" type="text">
+        Phone: <input value="{{ family.ec_2_phone }}" name="ec_2_phone" type="text">
+        Relationship: <input value="{{ family.ec_2_relation }}" name="ec_2_relation" type="text">
+
+
+        <input type="submit" value="SAVE"/>
+    </form>
+
+    <a href="/detail/">Next >></a>
+
+{% endblock %}

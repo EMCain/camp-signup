@@ -12,7 +12,24 @@ class Family(models.Model):
     # last_name = models.CharField(max_length=50)
     # email = models.EmailField()
     user = models.OneToOneField(User)
-    phone = models.CharField(max_length=15, default="needed")  # will create validation later
+    phone = models.CharField(max_length=15)  # will create validation later
+
+    street_address = models.CharField(max_length=50, default="")
+    apt_no = models.CharField(max_length=15, default="")
+    city = models.CharField(max_length=50, default="")
+    state = models.CharField(max_length=2, default="WA")
+    zip_code = models.CharField(max_length=5, default="")
+
+    ec_1_first = models.CharField(max_length=50, default="")
+    ec_1_last = models.CharField(max_length=50, default="")
+    ec_1_phone = models.CharField(max_length=50, default="")
+    ec_1_relation = models.CharField(max_length=50, default="")
+
+    ec_2_first = models.CharField(max_length=50, default="")
+    ec_2_last = models.CharField(max_length=50, default="")
+    ec_2_phone = models.CharField(max_length=50, default="")
+    ec_2_relation = models.CharField(max_length=50, default="")
+
     total_owed = models.DecimalField(max_digits=20, decimal_places=4, default=0)
     total_paid = models.DecimalField(max_digits=20, decimal_places=4, default=0)
 
@@ -37,6 +54,11 @@ class Camper(models.Model):
     last_name = models.CharField(max_length=50)
     under_18 = models.BooleanField()
     dob = models.DateField(null=True, blank=True)
+
+    is_vegetarian = models.BooleanField(default=False)
+    is_vegan = models.BooleanField(default=False)
+    is_gf = models.BooleanField(default=False)
+    is_df = models.BooleanField(default=False)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -63,6 +85,9 @@ class Attendance(models.Model):  # i.e. Campers by year
     event_year = models.ForeignKey(EventYear)
     camper = models.ForeignKey(Camper)
     grade = models.IntegerField(null=True, blank=True)
+    # eventually create a 'grades' table and make this fk
+    sponsor = models.CharField(null=True, blank=True, max_length=50)
+    sponsor_phone = models.CharField(null=True, blank=True, max_length=15)
 
     def age_at_start(self):
         try:

@@ -19,7 +19,7 @@ header {
     padding: 0 0 1em 0;
     margin-top: 0;
     top: 0;
-    border-style: none none double none;
+    border-style: none none double;
     border-color: #3A2D0D;
     border-width: 5px;
 }
@@ -88,7 +88,7 @@ header {
     border: 3px outset #303457;
 
     height: auto;
-    width: 80%;
+    width: 90%;
 
 
     margin: 2em auto auto auto;
@@ -106,15 +106,13 @@ header {
 	background-color: cornsilk;
 }
 
-span .glyph {
-    @extend .glyphicon;
-}
 
-span .sign-up {
-    @extend .glyphicon-plus;
+.row {
+    max-width: 100%;
 }
 
 span .input-group {
     margin: 0;
 }
+
 

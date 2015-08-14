@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+import datetime
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 
@@ -69,16 +71,50 @@ def logout_view(request):
     return redirect("/logout_successful/")
 
 
+# @login_required(login_url='/login_needed/')
+# def index(request):
+#     families_list = Family.objects.order_by("user__last_name")
+# #often use two underscores to represent dot/fk relationship
+#     template = loader.get_template('seabeck_draft/index.html')
+#     context = RequestContext(request, {'families_list': families_list})
+#
+#     return HttpResponse(template.render(context))
+
 @login_required(login_url='/login_needed/')
 def index(request):
-    families_list = Family.objects.order_by("user__last_name")
-#often use two underscores to represent dot/fk relationship
-    template = loader.get_template('seabeck_draft/index.html')
-    context = RequestContext(request, {'families_list': families_list})
+    family = get_object_or_404(Family, user=request.user)
 
-    return HttpResponse(template.render(context))
+    if request.POST:
+        print(request.POST)
+        family.user.first_name = request.POST["first_name"]
+        family.user.last_name = request.POST["last_name"]
+        family.user.email = request.POST["email"]
+        family.phone = request.POST["phone"]
 
-@login_required()
+        family.street_address = request.POST["street_address"]
+        family.apt_no = request.POST["apt_no"]
+        family.city = request.POST["city"]
+        family.state = request.POST["state"]
+        family.zip_code = request.POST["zip_code"]
+
+        family.ec_1_first = request.POST["ec_1_first"]
+        family.ec_1_last = request.POST["ec_1_last"]
+        family.ec_1_phone = request.POST["ec_1_phone"]
+        family.ec_1_relation = request.POST["ec_1_relation"]
+
+        family.ec_2_first = request.POST["ec_2_first"]
+        family.ec_2_last = request.POST["ec_2_last"]
+        family.ec_2_phone = request.POST["ec_2_phone"]
+        family.ec_2_relation = request.POST["ec_2_relation"]
+
+        family.save()
+        return HttpResponseRedirect("/")
+
+    return render(request, 'seabeck_draft/index.html', {'family': family})
+
+
+
+@login_required(login_url='/login_needed/')
 def detail(request):
 
     family = get_object_or_404(Family, user=request.user)
@@ -100,8 +136,24 @@ def api_campers(request):
     for camper in campers:
         in_current_year = len(Attendance.objects.filter(camper=camper, event_year=current_year)) > 0
 
+        output.append({
+            "id":camper.id,
+            "name": camper.first_name + " " + camper.last_name,
+            "in_current_year" : in_current_year,
+            "under_18":camper.under_18,
+            "is_vegetarian": camper.is_vegetarian,
+            "is_vegan": camper.is_vegan,
+            "is_gf": camper.is_gf,
+            "is_df": camper.is_df,
+            "dob": str(camper.dob)
+        })
 
-        output.append({"id":camper.id, "name": camper.first_name + " " + camper.last_name,  "in_current_year" : in_current_year})
+        if in_current_year and camper.under_18: # not sure about second condition
+            output.append({
+                "grade": Attendance.objects.filter(camper=camper, event_year=current_year).grade,
+                "sponsor": Attendance.objects.filter(camper=camper, event_year=current_year).sponsor,
+                # "sponsor_phone": Attendance.objects.filter(camper=camper, event_year=current_year).sponsor_phone
+            })
 
 
     return HttpResponse(json.dumps(output, indent=4), content_type="application/json")
@@ -111,6 +163,24 @@ def api_campers(request):
 #         family = get_object_or_404(Family, pk=family_id)
 #     return render(request, 'seabeck_draft/detail.html', {'family': family})
 #
+
+
+def update_camper(request):
+    if request.POST:
+        print(request.POST)
+        camper_id = int(request.POST.get("camper_id"))
+        camper = get_object_or_404(Camper, id=camper_id)
+
+        if "dob" in request.POST:
+            camper.dob = datetime.datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
+        # if "last_name" in request.POST:
+        #     user.last_name = request.POST.get("last_name")
+        # if "bio" in request.POST:
+        #     dancer.bio = request.POST.get("bio")
+
+        camper.save()
+
+        return HttpResponseRedirect("/api_campers/")
 
 
 def login_needed(request):

@@ -6,8 +6,7 @@
 {% block content %}
     {% load staticfiles %}
 
-    <link rel='stylesheet' type="text/css" href='{% static "my_app/css/bootstrap-theme.css" %}'/>
-    <link rel='stylesheet' type="text/css" href='{% static "my_app/css/custom.css" %}'/>
+
     <style>
         #campers_of_family {
             color: slategray;
@@ -37,6 +36,6 @@
     <a href="/">Return to main page</a>
 
     <script src='{% static "my_app/js/draw_detail.js" %}'></script>
-{#    call fetch here #}
+    <script>    fetch("/api_campers/"); </script>
 
 {% endblock %}

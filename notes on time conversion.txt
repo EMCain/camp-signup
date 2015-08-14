@@ -1,0 +1,11 @@
+examples of how to use strftime and strptime
+
+
+>>> import datetime
+>>> date = datetime.datetime.strptime("21/11/06 16:30", "%d/%m/%y %H:%M")
+>>> date
+datetime.datetime(2006, 11, 21, 16, 30)
+>>> thestr = datetime.datetime.strftime(date, "%d/%m/%y %H:%M")
+>>> thestr
+'21/11/06 16:30'
+>>>
