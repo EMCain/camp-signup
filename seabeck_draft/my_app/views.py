@@ -2,6 +2,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
+
 import datetime
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -164,12 +167,13 @@ def api_campers(request):
 #     return render(request, 'seabeck_draft/detail.html', {'family': family})
 #
 
-
+# @ensure_csrf_cookie
+@csrf_exempt
 def update_camper(request):
     if request.POST:
         print(request.POST)
-        camper_id = int(request.POST.get("camper_id"))
-        camper = get_object_or_404(Camper, id=camper_id)
+        id = int(request.POST.get("id"))
+        camper = get_object_or_404(Camper, id=id)
 
         if "dob" in request.POST:
             camper.dob = datetime.datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
@@ -180,7 +184,7 @@ def update_camper(request):
 
         camper.save()
 
-        return HttpResponseRedirect("/api_campers/")
+    return HttpResponse(str(camper.id))
 
 
 def login_needed(request):

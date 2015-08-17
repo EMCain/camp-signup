@@ -39,6 +39,7 @@ urlpatterns = [
     # url(r'^dynamic_detail/(?P<family_id>[0-9]+)/$', views.dynamic_detail, name='dynamic_detail'),
 
     url(r'^api_campers/$', views.api_campers, name='api_campers'),
+    url(r'^update_camper/$', views.update_camper, name='update_camper'),
 
     url(r'^detail/$', views.detail, name='detail'),
 
