@@ -96,10 +96,10 @@ function fillFormSections(camperid) {
 }
 
 
-function getCamperById(id){
-    for (var i = 0; i < data.length; i ++ ) {
+function getCamperById(id) {
+    for (var i = 0; i < data.length; i++) {
         var camper = data[i];
-        if(camper.id == id) {
+        if (camper.id == id) {
             return camper;
         }
     }
@@ -112,13 +112,17 @@ function saveCamper(camper) {
     var fd = new FormData();
 
     fd.append("dob", camper.dob);
-    fd.append("id", camper.id);
+
+    for (var key in camper) {
+        fd.append(key, camper[key]);
+    }
+
+//    fd.append("id", camper.id);
 
     //request.onreadystatechange = onRequestChange;
 
     request.open("POST", url, true);
     request.send(fd);
-
 
 
 }
@@ -134,8 +138,64 @@ function onChange(e) {
 
     saveCamper(camper);
 }
+//checkbox change event
+
+function onCheck(e) {
+    console.log(e.target);
+
+    //var value = e.target.value;
+    //var field_name = e.target.name;
+    ////update[field_name] = value;
+    //var id = e.target.getAttribute("data-id")
+    //var camper = getCamperById(id);
+    //camper.dob = value;
+    //
+    //saveCamper(camper);
+
+    var value = e.target.checked;
+    var field_name = e.target.name;
+    var id = e.target.getAttribute("data-id");
+    var camper = getCamperById(id);
+    var box_class = e.target.classList;
+
+    console.log(box_class);
+
+    if (box_class.contains("vegetarian")) {
+        console.log("contains vegetarian");
+        camper.is_vegetarian = value;
+    }
+
+    //switch (box_class) {
+    //    case "input-group-addon vegetarian_checkbox":
+    //        camper.is_vegetarian = value;
+    //        break;
+    //    case "input-group-addon vegan_checkbox":
+    //        camper.is_vegan = value;
+    //        break;
+    //    case "input-group-addon gf_checkbox":
+    //        camper.is_gf = value;
+    //        break;
+    //    case "input-group-addon df_checkbox":
+    //        camper.is_df = value;
+    //        break;
+    //    default:
+    //        break;
+    //}
+
+    saveCamper(camper);
 
 
+
+
+
+}
+
+
+//property -- checked
+//
+
+
+//todo make these into one function
 function addElementListener(camper, el) { // takes element as input
 
     var update = {"dob": camper.dob};
@@ -144,6 +204,38 @@ function addElementListener(camper, el) { // takes element as input
 
 }
 
+function addCheckboxListener(camper, el) {
+
+    console.log(el);
+
+    var question_type = el.class;
+
+    var update = {};
+
+    //switch (question_type) {
+    //    case "input-group-addon vegetarian_checkbox":
+    //        update = {"vegetarian": camper.is_vegetarian};
+    //        break;
+    //    case "input-group-addon vegan_checkbox":
+    //        update = {"vegan": camper.is_vegan};
+    //        break;
+    //    case "input-group-addon gf_checkbox":
+    //        update = {"gf": camper.is_gf};
+    //        break;
+    //    case "input-group-addon df_checkbox":
+    //        update = {"gf": camper.is_gf};
+    //        break;
+    //    default:
+    //        break;
+    //}
+
+    if (el.classList.contains('vegetarian_checkbox')) {
+        update = {"vegetarian": camper.is_vegetarian};
+    }
+
+    el.addEventListener("change", onCheck);
+
+}
 function onRequestChange() { //more descriptive name
     console.log(request.readyState, request.status);
     if ((request.readyState == 4) && (request.status == 200)) {
@@ -283,7 +375,8 @@ function drawCampers() {
             var check_box = document.createElement("INPUT");
             check_box.setAttribute("type", "checkbox");
             check_box.setAttribute("id", need + "_" + id);
-            check_box.setAttribute("class", "input-group-addon");
+            check_box.setAttribute("class", "input-group-addon " + need + "_checkbox");
+            check_box.setAttribute("data-id", id);
 
             check_box.checked = data[item]["is_" + need];
             // takes the boolean value from is_vegetarian etc and uses it to set the checkbox to checked or not checked
@@ -292,6 +385,9 @@ function drawCampers() {
             //not sure if this is the best way to assign classes to elements. Will depend on how they are used.
             //todo figure out how forms will be used for POST request and make sure the attributes are useful for that
             console.log("appending checkbox to addon");
+
+            addCheckboxListener(data[item], check_box);
+
             check_box_addon.appendChild(check_box);
 
         }
@@ -326,7 +422,7 @@ function drawCampers() {
 
             var age_label = document.createElement("span");
             age_label.setAttribute("class", "input-group-addon");
-            age_label.setAttribute("id", "input-group-addon-"+id);
+            age_label.setAttribute("id", "input-group-addon-" + id);
             age_label.innerHTML = age_q_labels[i]; //eventually change to using a different more readable set of labels
             inp_gr.appendChild(age_label);
 
