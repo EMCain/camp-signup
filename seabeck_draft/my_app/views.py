@@ -140,10 +140,10 @@ def api_campers(request):
         in_current_year = len(Attendance.objects.filter(camper=camper, event_year=current_year)) > 0
 
         output.append({
-            "id":camper.id,
+            "id": camper.id,
             "name": camper.first_name + " " + camper.last_name,
-            "in_current_year" : in_current_year,
-            "under_18":camper.under_18,
+            "in_current_year": in_current_year,
+            "under_18": camper.under_18,
             "is_vegetarian": camper.is_vegetarian,
             "is_vegan": camper.is_vegan,
             "is_gf": camper.is_gf,
@@ -157,7 +157,6 @@ def api_campers(request):
                 "sponsor": Attendance.objects.filter(camper=camper, event_year=current_year).sponsor,
                 # "sponsor_phone": Attendance.objects.filter(camper=camper, event_year=current_year).sponsor_phone
             })
-
 
     return HttpResponse(json.dumps(output, indent=4), content_type="application/json")
 
@@ -182,7 +181,10 @@ def update_camper(request):
         # if "bio" in request.POST:
         #     dancer.bio = request.POST.get("bio")
 
-        camper.save()
+        if "is_vegetarian" in request.POST:
+            camper.is_vegetarian = request.POST.get("is_vegetarian")
+
+    camper.save()
 
     return HttpResponse(str(camper.id))
 

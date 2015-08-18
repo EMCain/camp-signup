@@ -109,20 +109,43 @@ function saveCamper(camper) {
 
     var url = "/update_camper/";
 
+    console.log(camper.is_vegetarian);
+
     var fd = new FormData();
 
-    fd.append("dob", camper.dob);
 
-    for (var key in camper) {
-        fd.append(key, camper[key]);
+
+
+    if (typeof camper.dob !== 'undefined') {
+        fd.append("dob", camper.dob);
     }
+    if (typeof camper.is_vegetarian !== 'undefined') {
+        fd.append("is_vegetarian", camper.is_vegetarian);
+    }
+
+    request = new XMLHttpRequest();
+
+
+
+    //request.open('POST', '/sample', true);
+    //request.send(fd);
+
+    request.open("POST", url, true);
+    request.send(fd);
+
+// might add reference to vegetarian here. looks a little different from the loop below
+
+
+
+//    for (var key in camper) {
+//        fd.append(key, camper.key);
+//    }
 
 //    fd.append("id", camper.id);
 
     //request.onreadystatechange = onRequestChange;
 
-    request.open("POST", url, true);
-    request.send(fd);
+
 
 
 }
@@ -160,7 +183,8 @@ function onCheck(e) {
 
     console.log(box_class);
 
-    if (box_class.contains("vegetarian")) {
+    if (box_class.contains("vegetarian_checkbox")){
+
         console.log("contains vegetarian");
         camper.is_vegetarian = value;
     }
@@ -183,9 +207,6 @@ function onCheck(e) {
     //}
 
     saveCamper(camper);
-
-
-
 
 
 }
@@ -233,7 +254,7 @@ function addCheckboxListener(camper, el) {
         update = {"vegetarian": camper.is_vegetarian};
     }
 
-    el.addEventListener("change", onCheck);
+    el.addEventListener("click", onCheck);
 
 }
 function onRequestChange() { //more descriptive name
