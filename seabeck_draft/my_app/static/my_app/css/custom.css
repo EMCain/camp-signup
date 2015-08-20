@@ -79,7 +79,7 @@ header {
     background-color: rgba(236, 231, 228, 0.8);
     color: #303457;
     box-shadow: .1em .1em .1em #2C2724;
-    padding: 2em 2em 1em 2em;
+    padding: 5%;
     border-width: 1em;
     border-color: #303457;
 
@@ -91,7 +91,8 @@ header {
     width: 90%;
 
 
-    margin: 2em auto auto auto;
+    margin: 5% 5% 5% 5%;
+
 
     top: 20%;
 
@@ -108,11 +109,15 @@ header {
 
 
 .row {
-    max-width: 100%;
+    width: 100%;
+    margin-bottom: 1em;
 }
 
 span .input-group {
     margin: 0;
 }
 
+input {
+    min-width: 8em;
+}
 
