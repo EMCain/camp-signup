@@ -81,11 +81,31 @@ class EventYear(models.Model):
         return unicode("Camp Year ") + unicode(self.start_date.year)
 
 
+class SchoolGroup(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+
+class Grade(models.Model):
+    code = models.IntegerField()
+    name = models.CharField(max_length=20)
+    school_group = models.ForeignKey(SchoolGroup)
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
 class Attendance(models.Model):  # i.e. Campers by year
     event_year = models.ForeignKey(EventYear)
     camper = models.ForeignKey(Camper)
-    grade = models.IntegerField(null=True, blank=True)
-    # eventually create a 'grades' table and make this fk
+    grade = models.ForeignKey(Grade)
     sponsor = models.CharField(null=True, blank=True, max_length=50)
     sponsor_phone = models.CharField(null=True, blank=True, max_length=15)
 

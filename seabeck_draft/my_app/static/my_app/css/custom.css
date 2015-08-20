@@ -11,6 +11,11 @@ body {
     padding: 0;
 }
 
+body * {
+    padding: 0;
+    margin:0;
+}
+
 header {
     background-color: #FDFAE7;
     color: #A7B986;
@@ -108,8 +113,8 @@ header {
 }
 
 
-.row {
-    width: 100%;
+.container .row {
+    width: 90%;
     margin-bottom: 1em;
 }
 
@@ -121,3 +126,6 @@ input {
     min-width: 8em;
 }
 
+/*input[type="checkbox"] {*/
+    /*border: 3px solid black;*/
+/*}*/

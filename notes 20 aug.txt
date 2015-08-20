@@ -1,0 +1,55 @@
+notes 8/20 
+
+did today:
+==========
+
+got POST to work for vegetarian checkbox, DOB fields on Detail
+worked on js challenge; took notes on stuff to know for similar challenges
+
+created SchoolGroup and Grade models
+created a Fixture in JSON to auto-load the above
+
+need to do to follow up on the above:
+=====================================
+
+create a loop to get all fields to post on Detail page
+
+change "grade" field to a dropdown list that uses the "grades" table, use JS to show the person's grade when page loads, and add "not in school" as the default grade on the model
+
+create default="none" for the sponsor name and phone attributes in models.py, and hook these up to the form
+
+
+Stuff to clean up:
+=================
+
+(good project for when I'm feeling tired/unfocused. Get rid of thing and test to make sure still works)
+
+get rid of unused views, models, and templates. 
+
+get rid of commented out code everywhere
+
+go through existing models. remove unused fields/variables/methods. 
+Add csrf and login_required decorators where needed. 
+
+fix the header contents for the index page. 
+
+
+
+new features to add:
+====================
+
+(in order of priority)
+
+1. create admin area
+
+2. housing -- work on after wrapping up existing
+-some new tables
+-another page for these questions
+
+3. payment calculation
+-rates tables
+-decide what method I want to use to trigger this
+
+4. processing payment
+-don't do until payment calculation has happened
+

@@ -123,12 +123,10 @@ function saveCamper(camper) {
         fd.append("is_vegetarian", camper.is_vegetarian);
     }
 
-    request = new XMLHttpRequest();
+    fd.append("id", camper.id);
 
+    var request = new XMLHttpRequest();
 
-
-    //request.open('POST', '/sample', true);
-    //request.send(fd);
 
     request.open("POST", url, true);
     request.send(fd);

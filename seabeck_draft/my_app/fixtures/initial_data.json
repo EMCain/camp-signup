@@ -1,0 +1,204 @@
+[
+  {
+    "model": "my_app.schoolgroup",
+    "pk": 1,
+    "fields": {
+      "name": "pre-k"
+    }
+  },
+  {
+    "model": "my_app.schoolgroup",
+    "pk": 2,
+    "fields": {
+      "name": "kindergarten"
+    }
+  },
+
+  {
+    "model": "my_app.schoolgroup",
+    "pk": 3,
+    "fields": {
+      "name": "elementary school"
+    }
+  },
+
+  {
+    "model": "my_app.schoolgroup",
+    "pk": 4,
+    "fields": {
+      "name": "middle school"
+    }
+  },
+
+  {
+    "model": "my_app.schoolgroup",
+    "pk": 5,
+    "fields": {
+      "name": "high school"
+    }
+  },
+
+  {
+    "model": "my_app.schoolgroup",
+    "pk": 6,
+    "fields": {
+      "name": "not in school"
+    }
+  },
+
+
+
+  {
+    "model": "my_app.grade",
+    "pk": 1,
+    "fields": {
+      "code": -1,
+      "name": "pre-k",
+      "school_group": 1
+    }
+  },
+
+  {
+    "model": "my_app.grade",
+    "pk": 2,
+    "fields": {
+      "code": 0,
+      "name": "kindergarten",
+      "school_group": 1
+    }
+  },
+
+  {
+	"model": "my_app.grade",
+	"pk": 3,
+	"fields": {
+		"code": 1,
+		"name": "1st grade",
+		"school_group": 3
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 4,
+	"fields": {
+		"code": 2,
+		"name": "2nd grade",
+		"school_group": 3
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 5,
+	"fields": {
+		"code": 3,
+		"name": "3rd grade",
+		"school_group": 3
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 6,
+	"fields": {
+		"code": 4,
+		"name": "4th grade",
+		"school_group": 3
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 7,
+	"fields": {
+		"code": 5,
+		"name": "5th grade",
+		"school_group": 3
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 8,
+	"fields": {
+		"code": 6,
+		"name": "6th grade",
+		"school_group": 4
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 9,
+	"fields": {
+		"code": 7,
+		"name": "7th grade",
+		"school_group": 4
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 10,
+	"fields": {
+		"code": 8,
+		"name": "8th grade",
+		"school_group": 4
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 11,
+	"fields": {
+		"code": 9,
+		"name": "9th grade",
+		"school_group": 5
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 12,
+	"fields": {
+		"code": 10,
+		"name": "10th grade",
+		"school_group": 5
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 13,
+	"fields": {
+		"code": 11,
+		"name": "11th grade",
+		"school_group": 5
+	}
+},
+
+{
+	"model": "my_app.grade",
+	"pk": 14,
+	"fields": {
+		"code": 12,
+		"name": "12th grade",
+		"school_group": 5
+	}
+},
+
+
+
+
+  {
+    "model": "my_app.grade",
+    "pk": 15,
+    "fields": {
+      "code": 13,
+      "name": "graduate/adult",
+      "school_group": 6
+    }
+  }
+
+ ]

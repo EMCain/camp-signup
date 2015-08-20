@@ -182,9 +182,12 @@ def update_camper(request):
         #     dancer.bio = request.POST.get("bio")
 
         if "is_vegetarian" in request.POST:
-            camper.is_vegetarian = request.POST.get("is_vegetarian")
+            print "is_vegetarian is in request.post!!!"
+            camper.is_vegetarian = request.POST.get("is_vegetarian") == 'true'
+        else:
+            print "is_vegetarian is not in request.post :("
 
-    camper.save()
+        camper.save()
 
     return HttpResponse(str(camper.id))
 
