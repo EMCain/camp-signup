@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 
 from django.shortcuts import get_object_or_404, render, redirect
 
-from .models import Family, Camper, Rate, EventYear, Attendance
+from .models import Family, Camper, Rate, EventYear, Attendance, Grade, SchoolGroup
 
 import json
 
@@ -151,22 +151,32 @@ def api_campers(request):
             "dob": str(camper.dob)
         })
 
-        if in_current_year and camper.under_18: # not sure about second condition
+        if in_current_year:
             output.append({
-                "grade": Attendance.objects.filter(camper=camper, event_year=current_year).grade,
-                "sponsor": Attendance.objects.filter(camper=camper, event_year=current_year).sponsor,
-                # "sponsor_phone": Attendance.objects.filter(camper=camper, event_year=current_year).sponsor_phone
+                "grade": Attendance.objects.filter(camper=camper,
+                                                   event_year=current_year)[0].grade.code,
+                "sponsor": Attendance.objects.filter(camper=camper,
+                                                     event_year=current_year)[0].sponsor,
+                "sponsor_phone": Attendance.objects.filter(camper=camper,
+                                                           event_year=current_year)[0].sponsor_phone
             })
 
     return HttpResponse(json.dumps(output, indent=4), content_type="application/json")
 
 
-# def api_detail(request, family_id):
-#         family = get_object_or_404(Family, pk=family_id)
-#     return render(request, 'seabeck_draft/detail.html', {'family': family})
-#
+def api_grades(request):
+    all_grades = Grade.objects.all()
 
-# @ensure_csrf_cookie
+    output = [{}]
+
+    for grade in all_grades:
+        output.append({
+            "code": grade.code,
+            "name": grade.name
+        })
+
+    return HttpResponse(json.dumps(output), content_type="application/json")
+
 @csrf_exempt
 def update_camper(request):
     if request.POST:

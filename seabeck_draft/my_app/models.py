@@ -102,12 +102,13 @@ class Grade(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class Attendance(models.Model):  # i.e. Campers by year
     event_year = models.ForeignKey(EventYear)
     camper = models.ForeignKey(Camper)
-    grade = models.ForeignKey(Grade)
-    sponsor = models.CharField(null=True, blank=True, max_length=50)
-    sponsor_phone = models.CharField(null=True, blank=True, max_length=15)
+    grade = models.ForeignKey(Grade, default=15)
+    sponsor = models.CharField(null=True, blank=True, default=None, max_length=50)
+    sponsor_phone = models.CharField(null=True, blank=True, default=None, max_length=15)
 
     def age_at_start(self):
         try:

@@ -23,7 +23,7 @@ var family_id = 1;
 function campers(e) {
     console.log(e);
     var data = JSON.parse(e.target.responseText)
-    console.log(data)
+    console.log(campers_data)
 }
 function getCampers() {
     var request = new XMLHttpRequest();
