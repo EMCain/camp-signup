@@ -2,6 +2,7 @@ var request = new XMLHttpRequest();
 var grades_request = new XMLHttpRequest();
 
 function draw(data) {
+    window.campers_data = data;
     console.log(campers_data);
 
     //finds the div that we will be putting the campers_data in
@@ -474,7 +475,6 @@ function drawCampers() {
 
         current_element.value = campers_data[item]["dob"];
 
-        fillGrades();
 
     }
 
@@ -501,10 +501,10 @@ function drawGrades() {
         console.log("set id to " + id);
         var camper_select = document.getElementById("grade_field_" + id);
         console.log("getting camper_select object");
-        for(var grade in grades_data){
+        for(var grade in window.grades_data){
             var option = document.createElement("OPTION")
-            option.setAttribute("value", grades_data[grade].code);
-            option.innerHTML = grades_data[grade].name;
+            option.setAttribute("value", window.grades_data[grade].code);
+            option.innerHTML = window.grades_data[grade].name;
             //if(campers_data[item].attendence.grade.code == grade){
             //    option.setAttribute("selected", "true");
             //}
@@ -524,11 +524,11 @@ function fetch(url) { // better name??
     request.send();
 }
 
-//function fetchGrades(url) {
-//    grades_request.onreadystatechange = fillGrades;
-//    grades_request.open("GET", url, true);
-//    grades_request.send();
-//}
+function fetchGrades(url) {
+    grades_request.onreadystatechange = fillGrades;
+    grades_request.open("GET", url, true);
+    grades_request.send();
+}
 
 /**
  * Created by Emily on 8/6/2015.

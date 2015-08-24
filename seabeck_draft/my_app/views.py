@@ -167,7 +167,7 @@ def api_campers(request):
 def api_grades(request):
     all_grades = Grade.objects.all()
 
-    output = [{}]
+    output = []
 
     for grade in all_grades:
         output.append({

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source name="db" uuid="1073a488-6c0b-483c-a1e7-7890f870d7eb">
-    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
-  </data-source>
-  <data-source name="db [2]" uuid="7d72bdef-8116-4195-946d-9fa11bbaad11">
+  <data-source name="db" uuid="3fcd59b6-72ff-4f5d-9915-9fce1da20e58">
     <database-info product="SQLite" version="3.8.9" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
     <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
     <schema name="" catalog=""/>
@@ -115,11 +112,15 @@
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="event_year_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="camper_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
-      <column name="grade" sqlType="INTEGER" precision="2000000000" scale="10" nullable="true" jdbcType="4"/>
+      <column name="grade_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="sponsor" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="sponsor_phone" sqlType="VARCHAR(15)" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
       <primary-key columns="id"/>
-      <foreign-key name="#FAKE_my_app_attendance_1" columns="camper_id" ref-table="my_app_camper" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="#FAKE_my_app_attendance_2" columns="event_year_id" ref-table="my_app_eventyear" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_my_app_attendance_1" columns="grade_id" ref-table="my_app_grade" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_my_app_attendance_2" columns="camper_id" ref-table="my_app_camper" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="#FAKE_my_app_attendance_3" columns="event_year_id" ref-table="my_app_eventyear" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <exported-key name="#FAKE_my_app_shirtorder_2" table="my_app_shirtorder" schema="" catalog="" columns="attendance_id"/>
+      <index name="my_app_attendance_5c853be8" unique="true" columns="grade_id"/>
       <index name="my_app_attendance_2928da19" unique="true" columns="camper_id"/>
       <index name="my_app_attendance_046bf298" unique="true" columns="event_year_id"/>
     </table>
@@ -130,9 +131,13 @@
       <column name="last_name" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="under_18" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="dob" sqlType="DATE" precision="2000000000" scale="10" nullable="true" jdbcType="12"/>
+      <column name="is_vegetarian" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="is_vegan" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="is_gf" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="is_df" sqlType="BOOL" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
       <foreign-key name="#FAKE_my_app_camper_1" columns="family_id" ref-table="my_app_family" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <exported-key name="#FAKE_my_app_attendance_1" table="my_app_attendance" schema="" catalog="" columns="camper_id"/>
+      <exported-key name="#FAKE_my_app_attendance_2" table="my_app_attendance" schema="" catalog="" columns="camper_id"/>
       <exported-key name="#FAKE_my_app_foodpreference_1" table="my_app_foodpreference" schema="" catalog="" columns="camper_id"/>
       <index name="my_app_camper_0caa70f7" unique="true" columns="family_id"/>
     </table>
@@ -141,12 +146,25 @@
       <column name="start_date" sqlType="DATE" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="end_date" sqlType="DATE" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
-      <exported-key name="#FAKE_my_app_attendance_2" table="my_app_attendance" schema="" catalog="" columns="event_year_id"/>
+      <exported-key name="#FAKE_my_app_attendance_3" table="my_app_attendance" schema="" catalog="" columns="event_year_id"/>
     </table>
     <table name="my_app_family" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="user_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="phone" sqlType="VARCHAR(15)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="street_address" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="apt_no" sqlType="VARCHAR(15)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="city" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="state" sqlType="VARCHAR(2)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="zip_code" sqlType="VARCHAR(5)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_1_first" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_1_last" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_1_phone" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_1_relation" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_2_first" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_2_last" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_2_phone" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="ec_2_relation" sqlType="VARCHAR(50)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="total_owed" sqlType="DECIMAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
       <column name="total_paid" sqlType="DECIMAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
       <primary-key columns="id"/>
@@ -164,12 +182,28 @@
       <foreign-key name="#FAKE_my_app_foodpreference_1" columns="camper_id" ref-table="my_app_camper" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
       <index name="my_app_foodpreference_2928da19" unique="true" columns="camper_id"/>
     </table>
+    <table name="my_app_grade" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="code" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <column name="school_group_id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <primary-key columns="id"/>
+      <foreign-key name="#FAKE_my_app_grade_1" columns="school_group_id" ref-table="my_app_schoolgroup" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="#FAKE_my_app_attendance_1" table="my_app_attendance" schema="" catalog="" columns="grade_id"/>
+      <index name="my_app_grade_a5034665" unique="true" columns="school_group_id"/>
+    </table>
     <table name="my_app_rate" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="type" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
       <column name="item" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
       <column name="cost_per" sqlType="DECIMAL" precision="2000000000" scale="10" nullable="false" jdbcType="6"/>
       <primary-key columns="id"/>
+    </table>
+    <table name="my_app_schoolgroup" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR(20)" precision="2000000000" scale="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <exported-key name="#FAKE_my_app_grade_1" table="my_app_grade" schema="" catalog="" columns="school_group_id"/>
     </table>
     <table name="my_app_shirt" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" precision="2000000000" scale="10" nullable="false" jdbcType="4"/>
