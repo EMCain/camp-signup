@@ -1,106 +1,9 @@
 var request = new XMLHttpRequest();
-var grades_request = new XMLHttpRequest();
-
-function draw(data) {
-    window.campers_data = data;
-    console.log(campers_data);
-
-    //finds the div that we will be putting the campers_data in
-
-    var listdiv = document.getElementById("campers-list");
-
-    //writes the input string "campers_data" to the inside of the div. The line break may not be necessary.
-
-    listdiv.innerHTML = "<br>\n" + campers_data;
-}
-
-//function fillFormSections(camperid) {
-//
-//    //this function inserts form elements into a given camper's section. Uses 'addon' spans as the direct
-//    //parent--this is a Bootstrap feature that causes form elements and labels to line up nicely.
-//
-//    //by the time this is called, the parent elements have already been created.
-//    //still need to implement GET and POST functions -- right now it just creates an inert form.
-//    console.log("fillFormSections starting");
-//    var id = camperid;
-//
-//    // food questions section
-//
-//    var food_div = document.getElementById("food_div_" + id); // TODO find where this is supposed to be used
-//
-//    // food_div.style.display = "none";
-//
-//    //TODO turn this into a function that takes a dict/'object' and iterates over this stuff
-//    //TODO create a second function to generate the above mentioned object
-//
-//    //TODO may want to add listeners when doing the above
-//
-//    console.log("creating vegetarian box")
-//    var vegetarian = document.createElement("INPUT");
-//    vegetarian.setAttribute("type", "checkbox");
-//    vegetarian.setAttribute("id", "vegetarian_" + id);
-//    vegetarian.setAttribute("class", "diet_form_" + id);
-//
-//    //not sure if this is the best way to assign classes to elements. Will depend on how they are used.
-//    //todo figure out how forms will be used for POST request and make sure the attributes are useful for that
-//    console.log("appending vegetarian box to vegetarian addon")
-//    document.getElementById("vegetarian_addon_" + id).appendChild(vegetarian);
-//
-//    var vegan = document.createElement("INPUT");
-//    vegan.setAttribute("type", "checkbox");
-//    vegan.setAttribute("id", "vegan_" + id);
-//    vegan.setAttribute("class", "diet_form_" + id);
-//
-//    document.getElementById("vegan_addon_" + id).appendChild(vegan);
-//
-//    var gf = document.createElement("INPUT");
-//    gf.setAttribute("type", "checkbox");
-//    gf.setAttribute("id", "gf_" + id);
-//    gf.setAttribute("class", "diet_form_" + id);
-//
-//    document.getElementById("gf_addon_" + id).appendChild(gf);
-//
-//    var df = document.createElement("INPUT");
-//    df.setAttribute("type", "checkbox");
-//    df.setAttribute("id", "df_" + id);
-//    df.setAttribute("class", "diet_form_" + id);
-//
-//    document.getElementById("df_addon_" + id).appendChild(df);
-//
-//    // age questions section--only applies to campers under 18.
-//
-//    var age_div = document.getElementById("age_div_" + id);
-//
-//    //age_div.style.display = "none";
-//
-//    var dob = document.createElement("INPUT");
-//    dob.setAttribute("type", "date");
-//    dob.setAttribute("id", "dob_" + id);
-//    dob.setAttribute("class", "diet_form_" + id);
-//
-//    document.getElementById("dob_addon_" + id).appendChild(dob);
-//
-//    var grade = document.createElement("INPUT");
-//    grade.setAttribute("type", "text");
-//    grade.setAttribute("id", "grade_" + id);
-//    grade.setAttribute("class", "diet_form_" + id);
-//
-//    document.getElementById("grade_addon_" + id).appendChild(grade);
-//
-//    var sponsor = document.createElement("INPUT");
-//    sponsor.setAttribute("type", "text");
-//    sponsor.setAttribute("id", "gf_" + id);
-//    sponsor.setAttribute("class", "diet_form_" + id);
-//
-//    document.getElementById("sponsor_addon_" + id).appendChild(sponsor);
-//
-//    console.log("fillFormSections ending");
-//}
-
+//var grades_request = new XMLHttpRequest();
 
 function getCamperById(id) {
-    for (var i = 0; i < campers_data.length; i++) {
-        var camper = campers_data[i];
+    for (var i = 0; i < window.campers_data.length; i++) {
+        var camper = window.campers_data[i];
         if (camper.id == id) {
             return camper;
         }
@@ -111,39 +14,42 @@ function saveCamper(camper) {
 
     var url = "/update_camper/";
 
-    console.log(camper.is_vegetarian);
+    //console.log(camper.is_vegetarian);
 
     var fd = new FormData();
 
-
-    if (typeof camper.dob !== 'undefined') {
-        fd.append("dob", camper.dob);
-    }
-    if (typeof camper.is_vegetarian !== 'undefined') {
-        fd.append("is_vegetarian", camper.is_vegetarian);
+    for(var property in camper){
+        fd.append(property, camper[property]);
     }
 
-    fd.append("id", camper.id);
+    //
+    //
+    //if (typeof camper.dob !== 'undefined') {
+    //    fd.append("dob", camper.dob);
+    //}
+    //
+    //
+    //var qs = [camper.is_vegetarian, camper.is_vegan, camper.is_gf, camper.is_df, camper.sponsor_name, camper.sponsor_phone];
+    //var names = ["is_vegetarian", "is_vegan", "is_gf", "is_df", "sponsor_name", "sponsor_phone"];
+    //
+    //for(var i = 0; i < qs.length; i++){
+    //
+    //    var question = names[i];
+    //    var answer = qs[i];
+    //
+    //    if (camper.hasOwnProperty(question)) {
+    //        fd.append(question, answer);
+    //    }
+    //}
+    //
+    //
+    //
+    //fd.append("id", camper.id);
 
     var request = new XMLHttpRequest();
 
     request.open("POST", url, true);
     request.send(fd);
-
-// might add reference to vegetarian here. looks a little different from the loop below
-
-
-
-//    for (var key in camper) {
-//        fd.append(key, camper.key);
-//    }
-
-//    fd.append("id", camper.id);
-
-    //request.onreadystatechange = onRequestChange;
-
-
-
 
 }
 
@@ -151,10 +57,19 @@ function onChange(e) {
 
     var value = e.target.value;
     var field_name = e.target.name;
-    //update[field_name] = value;
     var id = e.target.getAttribute("data-id")
     var camper = getCamperById(id);
-    camper.dob = value;
+
+    if(field_name.indexOf("dob") > -1) {
+        camper.dob = value;
+    }
+    if (field_name.indexOf("sponsor_phone") > -1) {
+        camper.sponsor_phone = value;
+    }
+    if (field_name.indexOf("sponsor_name") > -1) {
+        camper.sponsor_name = value;
+    }
+
 
     saveCamper(camper);
 }
@@ -162,15 +77,6 @@ function onChange(e) {
 
 function onCheck(e) {
     console.log(e.target);
-
-    //var value = e.target.value;
-    //var field_name = e.target.name;
-    ////update[field_name] = value;
-    //var id = e.target.getAttribute("data-id")
-    //var camper = getCamperById(id);
-    //camper.dob = value;
-    //
-    //saveCamper(camper);
 
     var value = e.target.checked;
     var field_name = e.target.name;
@@ -181,27 +87,19 @@ function onCheck(e) {
     console.log(box_class);
 
     if (box_class.contains("vegetarian_checkbox")){
-
         console.log("contains vegetarian");
         camper.is_vegetarian = value;
+    } else if (box_class.contains("vegan_checkbox")){
+        console.log("contains vegan");
+        camper.is_vegan = value;
+    } else if (box_class.contains("gf_checkbox")){
+        console.log("contains gf");
+        camper.is_gf = value;
+    } else if (box_class.contains("df_checkbox")){
+        console.log("contains df");
+        camper.is_df = value;
     }
 
-    //switch (box_class) {
-    //    case "input-group-addon vegetarian_checkbox":
-    //        camper.is_vegetarian = value;
-    //        break;
-    //    case "input-group-addon vegan_checkbox":
-    //        camper.is_vegan = value;
-    //        break;
-    //    case "input-group-addon gf_checkbox":
-    //        camper.is_gf = value;
-    //        break;
-    //    case "input-group-addon df_checkbox":
-    //        camper.is_df = value;
-    //        break;
-    //    default:
-    //        break;
-    //}
 
     saveCamper(camper);
 
@@ -209,14 +107,12 @@ function onCheck(e) {
 }
 
 
-//property -- checked
-//
 
 
 //todo make these into one function
 function addElementListener(camper, el) { // takes element as input
 
-    var update = {"dob": camper.dob};
+    //var update = {"dob": camper.dob};
 
     el.addEventListener("change", onChange);
 
@@ -230,28 +126,22 @@ function addCheckboxListener(camper, el) {
 
     var update = {};
 
-    //switch (question_type) {
-    //    case "input-group-addon vegetarian_checkbox":
-    //        update = {"vegetarian": camper.is_vegetarian};
-    //        break;
-    //    case "input-group-addon vegan_checkbox":
-    //        update = {"vegan": camper.is_vegan};
-    //        break;
-    //    case "input-group-addon gf_checkbox":
-    //        update = {"gf": camper.is_gf};
-    //        break;
-    //    case "input-group-addon df_checkbox":
-    //        update = {"gf": camper.is_gf};
-    //        break;
-    //    default:
-    //        break;
-    //}
 
+    // this could be done with a loop
     if (el.classList.contains('vegetarian_checkbox')) {
         update = {"vegetarian": camper.is_vegetarian};
     }
+    if (el.classList.contains('vegan_checkbox')) {
+        update = {"vegan": camper.is_vegan};
+    }
+    if (el.classList.contains('gf_checkbox')) {
+        update = {"gf": camper.is_gf};
+    }
+    if (el.classList.contains('df_checkbox')) {
+        update = {"df": camper.is_df};
+    }
 
-    el.addEventListener("click", onCheck);
+    el.addEventListener("change", onCheck);
 
 }
 
@@ -262,7 +152,7 @@ function onRequestChange() { //more descriptive name
         console.log("onRequestChange successfully starting")
         window.campers_data = JSON.parse(request.responseText); //TODO more descriptive. make a separate function
         // todo change var campers_data to window.campers
-        console.log(campers_data);
+        console.log(window.campers_data);
         drawCampers();
     }
 }
@@ -277,10 +167,12 @@ function drawCampers() {
 
     //this for loop writes the html for each camper's summary line and form elements
 
-    for (var item in window.campers_data) { // TODO better name for item
+    for (var i =0; i < window.campers_data.length; i++) { // TODO better name for item
         //camper's id number will be used to construct DOM elements' id attributes
 
-        var id = window.campers_data[item].id.toString();
+        var camper = window.campers_data[i];
+
+        var id = camper.id;  //for some reason this is trying to draw grades??
 
         console.log("beginning for loop with camper id " + id);
 
@@ -291,7 +183,7 @@ function drawCampers() {
         console.log("creating camper-info div for camper " + id);
         var camper_info = document.createElement("div");
         camper_info.setAttribute("id", "camper_info_" + id);
-        if (campers_data[item].in_current_year) {
+        if (window.campers_data[i].in_current_year) {
             camper_info.setAttribute("class", "camper-info active");
         } else {
             camper_info.setAttribute("class", "camper-info inactive");
@@ -316,13 +208,13 @@ function drawCampers() {
         static_name_row.appendChild(static_name_column);
 
         //declaring string static_name_string here for the static row
-        var static_name_string = campers_data[item].name;
+        var static_name_string = window.campers_data[i].name;
 
         static_name_string += " - ";
 
         //depending on whether the person is attending, makes it say "attending" or "not attending"
 
-        if (!campers_data[item].in_current_year) {
+        if (!window.campers_data[i].in_current_year) {
             static_name_string += " not";
         }
 
@@ -342,7 +234,7 @@ function drawCampers() {
 
 
         console.log("assigning button text");
-        if (campers_data[item].in_current_year) {
+        if (window.campers_data[i].in_current_year) {
             attend_status_button.innerHTML = "Remove"; //+ current_year // find this out and create
         } else {
             attend_status_button.innerHTML = "Sign up"; //+ current_year
@@ -350,12 +242,9 @@ function drawCampers() {
 
         buttons_column.appendChild(attend_status_button);
 
-        // ends 1) the col-md-2 div 2) the row div
 
 
         //creates the food form section. Will eventually create a name change section above that
-        //also allows you to check boxes for "food preferences" and "under 18" that will
-        // bring up the following two sections if needed. These forms don't do anything yet.
 
 
         var food_row = document.createElement("div");
@@ -367,8 +256,8 @@ function drawCampers() {
         var food_needs = ["vegetarian", "vegan", "gf", "df"];
         var food_needs_labels = ["vegetarian", "vegan", "gluten free", "dairy free"];
 
-        for (var i = 0; i < food_needs.length; i++) {
-            var need = food_needs[i];
+        for (var j = 0; j < food_needs.length; j++) {
+            var need = food_needs[j];
 
             var fn = document.createElement("div");
             fn.setAttribute("class", "col-md-3");//does it make sense to make this an input group????
@@ -382,9 +271,8 @@ function drawCampers() {
             var fn_label = document.createElement("span");
             fn_label.setAttribute("class", "input-group-addon");
             fn_label.setAttribute("id", "input-group-addon");
-            fn_label.innerHTML = food_needs_labels[i];
+            fn_label.innerHTML = food_needs_labels[j];
             inp_gr.appendChild(fn_label);
-            // pick up again here; remove next section when done
 
 
             var check_box_addon = document.createElement("span");
@@ -399,7 +287,7 @@ function drawCampers() {
             check_box.setAttribute("class", "input-group-addon " + need + "_checkbox");
             check_box.setAttribute("data-id", id);
 
-            check_box.checked = campers_data[item]["is_" + need];
+            check_box.checked = window.campers_data[i]["is_" + need];
             // takes the boolean value from is_vegetarian etc and uses it to set the checkbox to checked or not checked
 
 
@@ -407,7 +295,7 @@ function drawCampers() {
             //todo figure out how forms will be used for POST request and make sure the attributes are useful for that
             console.log("appending checkbox to addon");
 
-            addCheckboxListener(campers_data[item], check_box);
+            addCheckboxListener(window.campers_data[i], check_box);
 
             check_box_addon.appendChild(check_box);
 
@@ -422,7 +310,7 @@ function drawCampers() {
 
         camper_info.appendChild(age_div);
 
-        var age_qs = ["dob", "grade", "sponsor", "sponsor_phone"] // eventually will want to make this a
+        var age_qs = ["dob", "grade", "sponsor_name", "sponsor_phone"] // eventually will want to make this a
         // hash with field: input type
         //dob will be date, grade will be a dropdown list generated from a "grades" table
         //
@@ -454,6 +342,7 @@ function drawCampers() {
                 //age_input.setAttribute("class", "form-control");
                 age_input.setAttribute("name", question);
                 age_input.setAttribute("data-id", id);
+                age_input.setAttribute("class", "grades-menu");
             } else {
 
                 var age_input = document.createElement("INPUT");
@@ -466,14 +355,15 @@ function drawCampers() {
 
             inp_gr.appendChild(age_input);
 
-            if (question == "dob") {
-                addElementListener(campers_data[item], age_input);
+            if (question == "dob" || question == "sponsor_name" || question == "sponsor_phone") {
+                addElementListener(camper, age_input); //what is camper doing here??
+                age_input.setAttribute("value", camper[question]);
             }
         }
 
-        var current_element = document.getElementById("dob_field_1");
-
-        current_element.value = campers_data[item]["dob"];
+        //var current_element = document.getElementById("dob_field_1");
+        //
+        //current_element.value = window.campers_data[item]["dob"];
 
 
     }
@@ -483,38 +373,39 @@ function drawCampers() {
 
 
 
-function fillGrades(){
+//function fillGrades(){
+//
+//    if((grades_request.readyState == 4) && (grades_request.status == 200)) {
+//
+//        window.grades_data = JSON.parse(grades_request.responseText);
+//        drawGrades();
+//    }
+//
+//}
 
-    if((grades_request.readyState == 4) && (grades_request.status == 200)) {
-
-        window.grades_data = JSON.parse(grades_request.responseText);
-        drawGrades();
-    }
-
-}
-
-function drawGrades() {
-    console.log("drawing grades")
-    for(var item in campers_data){
-        console.log("working with camper" + campers_data[item][name]);
-        //var id = campers_data[item].id.toString();
-        console.log("set id to " + id);
-        var camper_select = document.getElementById("grade_field_" + id);
-        console.log("getting camper_select object");
-        for(var grade in window.grades_data){
-            var option = document.createElement("OPTION")
-            option.setAttribute("value", window.grades_data[grade].code);
-            option.innerHTML = window.grades_data[grade].name;
-            //if(campers_data[item].attendence.grade.code == grade){
-            //    option.setAttribute("selected", "true");
-            //}
-            camper_select.appendChild(option);
-        }
-    }
-
-
-
-}
+//function drawGrades() {
+//    console.log("drawing grades")
+//    for(var i; i < window.campers_data; i++){
+//        console.log("working with camper" + window.campers_data[i][name]);
+//        //var id = window.campers_data[item].id.toString();
+//        var id = window.campers_data[i][id]
+//        console.log("set id to " + id);
+//        var camper_select = document.getElementById("grade_field_" + id);
+//        console.log("getting camper_select object");
+//        for(var grade in window.grades_data){
+//            var option = document.createElement("OPTION")
+//            option.setAttribute("value", window.grades_data[grade].code);
+//            option.innerHTML = window.grades_data[grade].name;
+//            //if(window.campers_data[item].attendence.grade.code == grade){
+//            //    option.setAttribute("selected", "true");
+//            //}
+//            camper_select.appendChild(option);
+//        }
+//    }
+//
+//
+//
+//}
 
 
 
@@ -524,11 +415,11 @@ function fetch(url) { // better name??
     request.send();
 }
 
-function fetchGrades(url) {
-    grades_request.onreadystatechange = fillGrades;
-    grades_request.open("GET", url, true);
-    grades_request.send();
-}
+//function fetchGradesThing(url) {
+//    grades_request.onreadystatechange = fillGrades;
+//    grades_request.open("GET", url, true);
+//    grades_request.send();
+//}
 
 /**
  * Created by Emily on 8/6/2015.

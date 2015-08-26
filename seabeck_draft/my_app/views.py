@@ -138,8 +138,10 @@ def api_campers(request):
     print(current_year)
     for camper in campers:
         in_current_year = len(Attendance.objects.filter(camper=camper, event_year=current_year)) > 0
+        attendance_list = Attendance.objects.filter(camper=camper, event_year=current_year)
+        attn = attendance_list[0]
 
-        output.append({
+        camper = {
             "id": camper.id,
             "name": camper.first_name + " " + camper.last_name,
             "in_current_year": in_current_year,
@@ -149,17 +151,18 @@ def api_campers(request):
             "is_gf": camper.is_gf,
             "is_df": camper.is_df,
             "dob": str(camper.dob)
-        })
+
+        }
 
         if in_current_year:
-            output.append({
-                "grade": Attendance.objects.filter(camper=camper,
-                                                   event_year=current_year)[0].grade.code,
-                "sponsor": Attendance.objects.filter(camper=camper,
-                                                     event_year=current_year)[0].sponsor,
-                "sponsor_phone": Attendance.objects.filter(camper=camper,
-                                                           event_year=current_year)[0].sponsor_phone
-            })
+            # camper['grade'] = Attendance.objects.filter(camper=camper,
+                                                  # event_year=current_year)[0].grade.code
+
+            camper["sponsor_name"] = attn.sponsor
+            camper["sponsor_phone"] = attn.sponsor_phone
+
+        output.append(camper)
+
 
     return HttpResponse(json.dumps(output, indent=4), content_type="application/json")
 
@@ -181,8 +184,14 @@ def api_grades(request):
 def update_camper(request):
     if request.POST:
         print(request.POST)
+
         id = int(request.POST.get("id"))
         camper = get_object_or_404(Camper, id=id)
+        years = EventYear.objects.all()
+        current_year = list(reversed(years))[0]
+        attn = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
+
+        print "attn is", attn
 
         if "dob" in request.POST:
             camper.dob = datetime.datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
@@ -197,7 +206,38 @@ def update_camper(request):
         else:
             print "is_vegetarian is not in request.post :("
 
+        if "is_vegan" in request.POST:
+            print "is_vegan is in request.post!!!"
+            camper.is_vegan = request.POST.get("is_vegan") == 'true'
+        else:
+            print "is_vegan is not in request.post :("
+
+        if "is_gf" in request.POST:
+            print "is_gf is in request.post!!!"
+            camper.is_gf = request.POST.get("is_gf") == 'true'
+        else:
+            print "is_gf is not in request.post :("
+
+        if "is_df" in request.POST:
+            print "is_df is in request.post!!!"
+            camper.is_df = request.POST.get("is_df") == 'true'
+        else:
+            print "is_df is not in request.post :("
+
+        if "sponsor_name" in request.POST:  # also check there is an attendance record for this year
+            print "adding sponsor"
+            attn.sponsor = request.POST.get("sponsor_name")
+        else:
+            print "not adding sponsor :("
+
+        if "sponsor_phone" in request.POST:
+            print "adding sponsor phone"
+            attn.sponsor_phone = request.POST.get("sponsor_phone")
+        else:
+            print "not adding sponsor phone :("
+
         camper.save()
+        attn.save()
 
     return HttpResponse(str(camper.id))
 
