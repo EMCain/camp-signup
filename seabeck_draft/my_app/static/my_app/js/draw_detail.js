@@ -315,7 +315,7 @@ function drawCampers() {
         //dob will be date, grade will be a dropdown list generated from a "grades" table
         //
 
-        var age_q_labels = ["Date of Birth", "Grade (starting Fall)", "Responsible Adult", "Adult's Phone"] // eventually fill in event year and registrant name
+        var age_q_labels = ["Date of Birth", "Grade", "Responsible Adult", "Adult's Phone"] // eventually fill in event year and registrant name
 
         for (var i = 0; i < age_qs.length; i++) {
             var question = age_qs[i];

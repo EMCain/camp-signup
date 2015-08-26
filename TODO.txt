@@ -53,7 +53,23 @@ PAYMENT
 
 Learn about payment functions in Django
 
-Things to address next:
+Things to address before deployment:
 
-Get Detail page to actually post updated info to the database (priority 1)
-add some Attendences, get them to show up and to post
+improve grades menu:
+-find way to get it to loop with multiple campers (test with multiple campers, make sure it tests if the attendance record exists)
+-give default value of "adult" to grades field in attendance model
+-get menu to display value of current grade record
+-get menu to post grade to database
+
+improve index/profile page:
+-remove "save" button, add onChange listeners to all fields
+-put everything in Bootstrap
+
+improve detail page:
+-buttons to add, delete, edit, change registration status of campers
+-hide unused form fields
+
+login permissions:
+-make sure all needed pages have them
+
+clean up unused page templates, js files
