@@ -10,48 +10,62 @@ function getCamperById(id) {
     }
 }
 
-function saveCamper(camper) {
+function changeAttendanceStatus(e) {
+    var id = this.getAttribute("data-id");
+    var camper = getCamperById(id);
+    saveCamper(camper, "changeAtnd");
+}
 
-    var url = "/update_camper/";
-
-    //console.log(camper.is_vegetarian);
+function saveCamper(camper, action) {
 
     var fd = new FormData();
 
-    for(var property in camper){
-        fd.append(property, camper[property]);
+    if (action == "update") {
+
+        var url = "/update_camper/";
+
+        for (var property in camper) {
+            fd.append(property, camper[property]);
+        }
+    }
+    if (action == "changeAtnd") { // currently this ONLY
+
+        var url = "/change_attendance/";
+
+
+        if (camper["in_current_year"]) {
+            fd.append("will_attend", "0"); // i.e. false; we are changing it so they will NOT attend
+            fd.append("id", camper.id);
+        } else {
+            fd.append("will_attend", "1"); // won't attend --> will attend
+            var props = ["id", "sponsor_name", "sponsor_phone"];
+
+            for (i in props) {
+                fd.append(props[i], camper[props[i]]);
+            }
+        }
     }
 
-    //
-    //
-    //if (typeof camper.dob !== 'undefined') {
-    //    fd.append("dob", camper.dob);
-    //}
-    //
-    //
-    //var qs = [camper.is_vegetarian, camper.is_vegan, camper.is_gf, camper.is_df, camper.sponsor_name, camper.sponsor_phone];
-    //var names = ["is_vegetarian", "is_vegan", "is_gf", "is_df", "sponsor_name", "sponsor_phone"];
-    //
-    //for(var i = 0; i < qs.length; i++){
-    //
-    //    var question = names[i];
-    //    var answer = qs[i];
-    //
-    //    if (camper.hasOwnProperty(question)) {
-    //        fd.append(question, answer);
-    //    }
-    //}
-    //
-    //
-    //
-    //fd.append("id", camper.id);
+    var saveRequest = new XMLHttpRequest();
+    saveRequest.open("POST", url, true);
 
-    var request = new XMLHttpRequest();
 
-    request.open("POST", url, true);
-    request.send(fd);
+    if (action == "changeAtnd") {
+        saveRequest.onload = fetchCampers
+    }
+
+    saveRequest.send(fd);
+
 
 }
+
+
+function fetchCampers(e) {
+
+    fetch("/api_campers/");
+
+}
+
 
 function onChange(e) {
 
@@ -60,7 +74,7 @@ function onChange(e) {
     var id = e.target.getAttribute("data-id")
     var camper = getCamperById(id);
 
-    if(field_name.indexOf("dob") > -1) {
+    if (field_name.indexOf("dob") > -1) {
         camper.dob = value;
     }
     if (field_name.indexOf("sponsor_phone") > -1) {
@@ -71,7 +85,7 @@ function onChange(e) {
     }
 
 
-    saveCamper(camper);
+    saveCamper(camper, "update");
 }
 //checkbox change event
 
@@ -86,27 +100,25 @@ function onCheck(e) {
 
     console.log(box_class);
 
-    if (box_class.contains("vegetarian_checkbox")){
+    if (box_class.contains("vegetarian_checkbox")) {
         console.log("contains vegetarian");
         camper.is_vegetarian = value;
-    } else if (box_class.contains("vegan_checkbox")){
+    } else if (box_class.contains("vegan_checkbox")) {
         console.log("contains vegan");
         camper.is_vegan = value;
-    } else if (box_class.contains("gf_checkbox")){
+    } else if (box_class.contains("gf_checkbox")) {
         console.log("contains gf");
         camper.is_gf = value;
-    } else if (box_class.contains("df_checkbox")){
+    } else if (box_class.contains("df_checkbox")) {
         console.log("contains df");
         camper.is_df = value;
     }
 
 
-    saveCamper(camper);
+    saveCamper(camper, "update");
 
 
 }
-
-
 
 
 //todo make these into one function
@@ -159,16 +171,21 @@ function onRequestChange() { //more descriptive name
 }
 
 
-function drawCampers() {
+function drawCampers() { //separate out the drawing of a given camper as a separate function
+    //then call that function when an attendence is added/removed
+
+    var listdiv = document.getElementById("campers-list");
+    listdiv.innerHTML = "";
 
     var cof_container = document.createElement("div");
     cof_container.setAttribute("class", "container");
     cof_container.setAttribute("id", "campers_of_family");
-    document.getElementById("campers-list").appendChild(cof_container); // should name this better
+
+    listdiv.appendChild(cof_container); // should name this better
 
     //this for loop writes the html for each camper's summary line and form elements
 
-    for (var i =0; i < window.campers_data.length; i++) { // TODO better name for item
+    for (var i = 0; i < window.campers_data.length; i++) { // TODO better name for item
         //camper's id number will be used to construct DOM elements' id attributes
 
         var camper = window.campers_data[i];
@@ -232,6 +249,7 @@ function drawCampers() {
 
         console.log("creating button");
         var attend_status_button = document.createElement("button");
+        attend_status_button.setAttribute("data-id", id);
 
 
         console.log("assigning button text");
@@ -241,15 +259,16 @@ function drawCampers() {
             attend_status_button.innerHTML = "Sign up"; //+ current_year
         }
 
-        buttons_column.appendChild(attend_status_button);
+        attend_status_button.addEventListener("click", changeAttendanceStatus);
 
+        buttons_column.appendChild(attend_status_button);
 
 
         //creates the food form section. Will eventually create a name change section above that
 
 
         var food_row = document.createElement("div");
-        food_row.setAttribute("class", "row");
+        food_row.setAttribute("class", "row food-row");
         food_row.setAttribute("id", "food_row_" + id);
         camper_info.appendChild(food_row)
 
@@ -306,7 +325,7 @@ function drawCampers() {
         //creates the form section with questions about minors
 
         var age_div = document.createElement("div");
-        age_div.setAttribute("class", "row");
+        age_div.setAttribute("class", "row age-row");
         age_div.setAttribute("id", "age_div_" + id);
 
         camper_info.appendChild(age_div);
@@ -333,11 +352,11 @@ function drawCampers() {
             var age_label = document.createElement("span");
             age_label.setAttribute("class", "input-group-addon");
             age_label.setAttribute("id", "input-group-addon-" + id);
-            age_label.innerHTML = age_q_labels[i]; //eventually change to using a different more readable set of labels
+            age_label.innerHTML = age_q_labels[k]; //eventually change to using a different more readable set of labels
             inp_gr.appendChild(age_label);
 
 
-            if(question == "grade") {
+            if (question == "grade") {
                 var age_input = document.createElement("SELECT");
                 age_input.setAttribute("id", question + "_field_" + id);
                 //age_input.setAttribute("class", "form-control");
@@ -373,49 +392,12 @@ function drawCampers() {
 }
 
 
-
-//function fillGrades(){
-//
-//    if((grades_request.readyState == 4) && (grades_request.status == 200)) {
-//
-//        window.grades_data = JSON.parse(grades_request.responseText);
-//        drawGrades();
-//    }
-//
-//}
-
-//function drawGrades() {
-//    console.log("drawing grades")
-//    for(var i; i < window.campers_data; i++){
-//        console.log("working with camper" + window.campers_data[i][name]);
-//        //var id = window.campers_data[item].id.toString();
-//        var id = window.campers_data[i][id]
-//        console.log("set id to " + id);
-//        var camper_select = document.getElementById("grade_field_" + id);
-//        console.log("getting camper_select object");
-//        for(var grade in window.grades_data){
-//            var option = document.createElement("OPTION")
-//            option.setAttribute("value", window.grades_data[grade].code);
-//            option.innerHTML = window.grades_data[grade].name;
-//            //if(window.campers_data[item].attendence.grade.code == grade){
-//            //    option.setAttribute("selected", "true");
-//            //}
-//            camper_select.appendChild(option);
-//        }
-//    }
-//
-//
-//
-//}
-
-
-
 function fetch(url) { // better name??
     request.onreadystatechange = onRequestChange;
     request.open("GET", url, true);
     request.send();
-
 }
+
 
 //function fetchGradesThing(url) {
 //    grades_request.onreadystatechange = fillGrades;

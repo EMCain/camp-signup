@@ -249,17 +249,29 @@ def update_camper(request):
 
     return HttpResponse(str(camper.id))
 
+@csrf_exempt
 def change_attendance(request):
-
-    will_attend = request.POST.get("will_attend")
+    print "will_attend from request is", request.POST.get("will_attend")
+    will_attend = request.POST.get("will_attend") == "1"
     id = request.POST.get("id")
     camper = get_object_or_404(Camper, id=id)
+    years = EventYear.objects.all()
+    current_year = list(reversed(years))[0]
 
     if will_attend:
-        years = EventYear.objects.all()
-        current_year = list(reversed(years))[0]
-        atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
 
+        atnd = Attendance()
+        atnd.event_year = current_year
+        atnd.camper = camper
+        # atnd.sponsor = request.POST.get("sponsor_name")
+        # atnd.sponsor_phone = request.POST.get("sponsor_phone")
+        atnd.save()
+
+    else:
+        atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
+        atnd.delete()
+
+    return HttpResponse(camper.id);
 
 
 

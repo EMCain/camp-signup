@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^api_campers/$', views.api_campers, name='api_campers'),
     url(r'^api_grades/$', views.api_grades, name='api_grades'),
     url(r'^update_camper/$', views.update_camper, name='update_camper'),
+    url(r'^change_attendance/$', views.change_attendance, name='change_attendance'),
 
     url(r'^detail/$', views.detail, name='detail'),
 
