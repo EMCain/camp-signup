@@ -154,6 +154,7 @@ function onRequestChange() { //more descriptive name
         // todo change var campers_data to window.campers
         console.log(window.campers_data);
         drawCampers();
+        fetchGrades("/api_grades/");
     }
 }
 
@@ -317,8 +318,8 @@ function drawCampers() {
 
         var age_q_labels = ["Date of Birth", "Grade", "Responsible Adult", "Adult's Phone"] // eventually fill in event year and registrant name
 
-        for (var i = 0; i < age_qs.length; i++) {
-            var question = age_qs[i];
+        for (var k = 0; k < age_qs.length; k++) {
+            var question = age_qs[k];
 
             var q = document.createElement("div");
             q.setAttribute("class", "col-md-3");//does it make sense to make this an input group????
@@ -413,6 +414,7 @@ function fetch(url) { // better name??
     request.onreadystatechange = onRequestChange;
     request.open("GET", url, true);
     request.send();
+
 }
 
 //function fetchGradesThing(url) {

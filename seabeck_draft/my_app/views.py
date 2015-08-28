@@ -139,7 +139,9 @@ def api_campers(request):
     for camper in campers:
         in_current_year = len(Attendance.objects.filter(camper=camper, event_year=current_year)) > 0
         attendance_list = Attendance.objects.filter(camper=camper, event_year=current_year)
-        attn = attendance_list[0]
+
+        if len(attendance_list) > 0:
+            attn = attendance_list[0]
 
         camper = {
             "id": camper.id,
@@ -186,12 +188,18 @@ def update_camper(request):
         print(request.POST)
 
         id = int(request.POST.get("id"))
-        camper = get_object_or_404(Camper, id=id)
+
+        if id == 0:
+            camper = Camper()
+
+        else:
+            camper = get_object_or_404(Camper, id=id)
+
         years = EventYear.objects.all()
         current_year = list(reversed(years))[0]
-        attn = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
+        atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
 
-        print "attn is", attn
+        print "attn is", atnd
 
         if "dob" in request.POST:
             camper.dob = datetime.datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
@@ -226,20 +234,34 @@ def update_camper(request):
 
         if "sponsor_name" in request.POST:  # also check there is an attendance record for this year
             print "adding sponsor"
-            attn.sponsor = request.POST.get("sponsor_name")
+            atnd.sponsor = request.POST.get("sponsor_name")
         else:
             print "not adding sponsor :("
 
         if "sponsor_phone" in request.POST:
             print "adding sponsor phone"
-            attn.sponsor_phone = request.POST.get("sponsor_phone")
+            atnd.sponsor_phone = request.POST.get("sponsor_phone")
         else:
             print "not adding sponsor phone :("
 
         camper.save()
-        attn.save()
+        atnd.save()
 
     return HttpResponse(str(camper.id))
+
+def change_attendance(request):
+
+    will_attend = request.POST.get("will_attend")
+    id = request.POST.get("id")
+    camper = get_object_or_404(Camper, id=id)
+
+    if will_attend:
+        years = EventYear.objects.all()
+        current_year = list(reversed(years))[0]
+        atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
+
+
+
 
 
 def login_needed(request):

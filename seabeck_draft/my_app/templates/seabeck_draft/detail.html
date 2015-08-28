@@ -37,8 +37,12 @@
 
     <script src='{% static "my_app/js/draw_detail.js" %}'></script>
     <script src='{% static "my_app/js/fill-grade-menu.js" %}'></script>
-    <script>    fetch("/api_campers/");
-                fetchGrades("/api_grades/");
+    <script>
+        function init(){
+            fetch("/api_campers/");
+        }
+        document.addEventListener("DOMContentLoaded", init);
+
     </script>
 
 {% endblock %}
