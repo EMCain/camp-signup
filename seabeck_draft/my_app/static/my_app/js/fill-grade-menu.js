@@ -4,13 +4,13 @@
 
 
 graderequest = new XMLHttpRequest();
-var menuTimeout;
+//var menuTimeout;
 
 window.gradeFillNeeded = true;
 
 function fillGrades(){
     console.log("starting fillGrades");
-    window.clearTimeout(menuTimeout);
+    //window.clearTimeout(menuTimeout);
     var menus = document.getElementsByClassName("grades-menu");
 
     for(var i =0; i < menus.length; i++){
@@ -34,6 +34,7 @@ function getGrades(){
             window.grades_data = JSON.parse(graderequest.responseText);
             window.gradeFillNeeded = false;
             fillGrades();
+            fetchCampersGrade(); //not sure if this is the right place
     //    } catch (e) {
     //        menuTimeout = window.setTimeout(getGrades, 100);
     //    }

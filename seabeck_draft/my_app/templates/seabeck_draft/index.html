@@ -32,63 +32,64 @@
 
         <h2>Contact information for user {{ family.user.first_name }} {{ family.user.last_name }}</h2>
 
-        < class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon">First name:</span>
-                    <input value="{{ family.user.first_name }}" class="form-control"
-                           name="first_name" type="text">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">First name:</span>
+                        <input value="{{ family.user.first_name }}" class="form-control"
+                               name="first_name" type="text">
 
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">Last name: </span>
+                        <input value="{{ family.user.last_name }}" class="form-control"
+                               name="last_name" type="text">
+                    </div>
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="input-group">
-                    <span class="input-group-addon">Last name: </span>
-                    <input value="{{ family.user.last_name }}" class="form-control"
-                           name="last_name" type="text">
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="input-group">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
                         <span class="input-group-addon">
 
             Phone number:</span>
-                    <input value="{{ family.phone }}" class="form-control" name="phone" type="text">
+                        <input value="{{ family.phone }}" class="form-control" name="phone" type="text">
 
+                    </div>
                 </div>
-            </div>
 
 
-            <div class="col-lg-6">
-                <div class="input-group">
+                <div class="col-lg-6">
+                    <div class="input-group">
                         <span class="input-group-addon">
                 Email address:</span>
-                    <input value="{{ family.user.email }}" class="form-control" name="email" type="text">
-                    {#make sure if the email address changes it gets POSTed to the username as well#}
+                        <input value="{{ family.user.email }}" class="form-control" name="email" type="text">
+                        {#make sure if the email address changes it gets POSTed to the username as well#}
+                    </div>
                 </div>
             </div>
-        </div>
-        <br>
+            <br>
 
-        <h2>{{ family.user.first_name }} {{ family.user.last_name }}'s Family Profile</h2>
+            <h2>{{ family.user.first_name }} {{ family.user.last_name }}'s Family Profile</h2>
 
-        <h3>Address</h3>
+            <h3>Address</h3>
 
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="input-group">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
                         <span class="input-group-addon">
             Street: </span>
-                    <input class="form-control" value="{{ family.street_address }}"
-                           name="street_address" type="text">
+                        <input class="form-control" value="{{ family.street_address }}"
+                               name="street_address" type="text">
+                    </div>
                 </div>
 
-                <div class="col-lg-5">
+                <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">
                     Apartment/suite:</span> <input class="form-control" value="{{ family.apt_no }}"
@@ -103,7 +104,6 @@
                         <span class="input-group-addon">
                     City: </span><input class="form-control" value="{{ family.city }}" name="city" type="text">
                 </div>
-
             </div>
             <div class="col-lg-3">
                 <div class="input-group">
@@ -111,12 +111,15 @@
                     State: </span><select class="form-control" id='states-menu' name="state"></select>
                 </div>
             </div>
-            <div class="col-lg-3">
-                Zip: <input value="{{ family.zip_code }}" name="zip_code" type="text">
-            </div>
-            <br>
 
-        </div>
+            <div class="col-lg-3">
+                <div class="input-group">
+                        <span class="input-group-addon">
+                Zip: </span><input class="form-control" value="{{ family.zip_code }}" name="zip_code" type="text">
+                </div>
+            </div>
+        <br>
+
 
         <h2>Emergency Contacts</h2>
 
@@ -124,28 +127,82 @@
         <h3>Primary (required)</h3>
 
         <div class="row">
-            First Name: <input value="{{ family.ec_1_first }}" name="ec_1_first" type="text">
-            Last Name: <input value="{{ family.ec_1_last }}" name="ec_1_last" type="text">
+            <div class="col-lg-6">
+
+                <div class="input-group">
+                <span class="input-group-addon">
+            First Name: </span><input class="form-control" value="{{ family.ec_1_first }}" name="ec_1_first"
+                                      type="text">
+                </div>
+            </div>
+            <div class="col-lg-6">
+
+                <div class="input-group">
+                <span class="input-group-addon">
+            Last Name: </span><input class="form-control" value="{{ family.ec_1_last }}" name="ec_1_last" type="text">
+                </div>
+            </div>
         </div>
         <div class="row">
-            Phone: <input value="{{ family.ec_1_phone }}" name="ec_1_phone" type="text">
-            Relationship: <input value="{{ family.ec_1_relation }}" name="ec_1_relation" type="text">
+            <div class="col-lg-6">
+                <div class="input-group">
+                <span class="input-group-addon">
+                Phone: </span><input class="form-control" value="{{ family.ec_1_phone }}" name="ec_1_phone" type="text">
+                </div>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">
+                Relationship: </span><input class="form-control" value="{{ family.ec_1_relation }}" name="ec_1_relation"
+                                            type="text">
+            </div>
+        </div>
         </div>
         <br>
 
         <h3>Secondary (Optional)</h3>
-        First Name: <input value="{{ family.ec_2_first }}" name="ec_2_first" type="text">
-        Last Name: <input value="{{ family.ec_2_last }}" name="ec_2_last" type="text">
-        Phone: <input value="{{ family.ec_2_phone }}" name="ec_2_phone" type="text">
-        Relationship: <input value="{{ family.ec_2_relation }}" name="ec_2_relation" type="text">
+
+        <div class="row">
+            <div class="col-lg-6">
+
+                <div class="input-group">
+                <span class="input-group-addon">
+            First Name: </span><input class="form-control" value="{{ family.ec_2_first }}" name="ec_2_first"
+                                      type="text">
+                </div>
+            </div>
+            <div class="col-lg-6">
+
+                <div class="input-group">
+                <span class="input-group-addon">
+            Last Name: </span><input value="{{ family.ec_2_last }}" name="ec_2_last" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                <span class="input-group-addon">
+                Phone: </span><input value="{{ family.ec_2_phone }}" name="ec_2_phone" type="text">
+                </div>
+                <div class="input-group">
+                <span class="input-group-addon">
+                Relationship: </span><input value="{{ family.ec_2_relation }}" name="ec_2_relation" type="text">
+                </div>
+            </div>
+        </div>
+        <br>
 
 
         <input type="submit" value="SAVE"/>
 
-        </div>
     </form>
 
     <a href="/detail/">Next >></a>
+
+        </div>
+
+    </div>
 
     <script src='{% static "my_app/js/fill-state-menu.js" %}'></script>
     <script>

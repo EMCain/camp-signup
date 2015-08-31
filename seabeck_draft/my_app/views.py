@@ -92,6 +92,7 @@ def index(request):
         family.user.first_name = request.POST["first_name"]
         family.user.last_name = request.POST["last_name"]
         family.user.email = request.POST["email"]
+        family.user.username = request.POST["email"]
         family.phone = request.POST["phone"]
 
         family.street_address = request.POST["street_address"]
@@ -123,10 +124,6 @@ def detail(request):
     family = get_object_or_404(Family, user=request.user)
     return render(request, 'seabeck_draft/detail.html', {'family': family})
 
-@login_required()
-def dynamic_detail(request, family_id):
-    # family = get_object_or_404(Family, pk=family_id)
-    return render(request, 'seabeck_draft/dynamic_detail.html', {})
 
 
 def api_campers(request):
@@ -141,7 +138,7 @@ def api_campers(request):
         attendance_list = Attendance.objects.filter(camper=camper, event_year=current_year)
 
         if len(attendance_list) > 0:
-            attn = attendance_list[0]
+            atnd = attendance_list[0]
 
         camper = {
             "id": camper.id,
@@ -160,8 +157,9 @@ def api_campers(request):
             # camper['grade'] = Attendance.objects.filter(camper=camper,
                                                   # event_year=current_year)[0].grade.code
 
-            camper["sponsor_name"] = attn.sponsor
-            camper["sponsor_phone"] = attn.sponsor_phone
+            camper["sponsor_name"] = atnd.sponsor
+            camper["sponsor_phone"] = atnd.sponsor_phone
+            camper["grade_code"] = atnd.grade.code
 
         output.append(camper)
 
@@ -198,6 +196,8 @@ def update_camper(request):
         years = EventYear.objects.all()
         current_year = list(reversed(years))[0]
         atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
+
+        grades = Grade.objects.all()
 
         print "attn is", atnd
 
@@ -244,6 +244,11 @@ def update_camper(request):
         else:
             print "not adding sponsor phone :("
 
+        if "grade_code" in request.POST:
+            print "adding grade code"
+            gradecode = request.POST.get("grade_code")
+            atnd.grade = grades.filter(code=int(gradecode))[0]
+
         camper.save()
         atnd.save()
 
@@ -281,33 +286,34 @@ def login_needed(request):
 
 def logout_successful(request):
     return render(request, 'seabeck_draft/logout_successful.html')
-
-def edit_family(request, family_id):
-
-    if family_id == 0:
-        print "new"
-        family = Family()
-    else:
-        print "existing"
-        family = get_object_or_404(Family, pk=family_id)
-
-    filtered_family_list = Family.objects.filter(id=family_id)
-
-#    if len(filtered_family_list) > 0:
-    family = filtered_family_list[0]
-#    else:
-#        family = Family()
-
-    if request.POST:
-        print(request.POST)
-        family.first_name = request.POST["first_name"]
-        family.last_name = request.POST["last_name"]
-        family.email = request.POST["email"]
-        family.phone = request.POST["phone"]
-        family.save()
-        return HttpResponseRedirect("/")
-
-    return render(request, 'seabeck_draft/edit_family.html', {'family': family})
+#
+# def edit_family(request, family_id):
+#
+#     if family_id == 0:
+#         print "new"
+#         family = Family()
+#     else:
+#         print "existing"
+#         family = get_object_or_404(Family, pk=family_id)
+#
+#     filtered_family_list = Family.objects.filter(id=family_id)
+#
+# #    if len(filtered_family_list) > 0:
+#     family = filtered_family_list[0]
+# #    else:
+# #        family = Family()
+#
+#     if request.POST:
+#         print(request.POST)
+#         family.first_name = request.POST["first_name"]
+#         family.last_name = request.POST["last_name"]
+#         family.email = request.POST["email"]
+#         family.username = request.POST["email"]
+#         family.phone = request.POST["phone"]
+#         family.save()
+#         return HttpResponseRedirect("/")
+#
+#     return render(request, 'seabeck_draft/edit_family.html', {'family': family})
 
 
 def new_family(request):
@@ -324,6 +330,40 @@ def new_family(request):
         return HttpResponseRedirect("/")
 
     return render(request, 'seabeck_draft/new_family.html', {'family': family})
+
+
+def update_family(request):
+    family = get_object_or_404(Family, user=request.user)
+
+    if request.POST:
+        print(request.POST)
+
+        family.user.first_name = request.POST["first_name"]
+        family.user.last_name = request.POST["last_name"]
+        family.user.email = request.POST["email"]
+        family.user.username = request.POST["email"]
+        family.phone = request.POST["phone"]
+
+        family.street_address = request.POST["street_address"]
+        family.apt_no = request.POST["apt_no"]
+        family.city = request.POST["city"]
+        family.state = request.POST["state"]
+        family.zip_code = request.POST["zip_code"]
+
+        family.ec_1_first = request.POST["ec_1_first"]
+        family.ec_1_last = request.POST["ec_1_last"]
+        family.ec_1_phone = request.POST["ec_1_phone"]
+        family.ec_1_relation = request.POST["ec_1_relation"]
+
+        family.ec_2_first = request.POST["ec_2_first"]
+        family.ec_2_last = request.POST["ec_2_last"]
+        family.ec_2_phone = request.POST["ec_2_phone"]
+        family.ec_2_relation = request.POST["ec_2_relation"]
+
+        family.save()
+        return HttpResponseRedirect("/")
+
+    return render(request, 'seabeck_draft/index.html', {'family': family})
 
 
 def edit_camper(request, camper_id):

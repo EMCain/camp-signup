@@ -330,12 +330,12 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
 
         camper_info.appendChild(age_div);
 
-        var age_qs = ["dob", "grade", "sponsor_name", "sponsor_phone"] // eventually will want to make this a
+        var age_qs = ["grade", "dob", "sponsor_name", "sponsor_phone"] // eventually will want to make this a
         // hash with field: input type
         //dob will be date, grade will be a dropdown list generated from a "grades" table
         //
 
-        var age_q_labels = ["Date of Birth", "Grade", "Responsible Adult", "Adult's Phone"] // eventually fill in event year and registrant name
+        var age_q_labels = ["Grade", "Date of Birth", "Responsible Adult", "Adult's Phone"] // eventually fill in event year and registrant name
 
         for (var k = 0; k < age_qs.length; k++) {
             var question = age_qs[k];

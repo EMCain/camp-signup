@@ -30,8 +30,8 @@ urlpatterns = [
 
 
 #    url(r'^new_family.html', views.new_family, name='new_family'),
-    url(r'^edit_family/(?P<family_id>[0-9]+)/$', views.edit_family,
-        name='edit_family'),
+#    url(r'^edit_family/(?P<family_id>[0-9]+)/$', views.edit_family,
+#        name='edit_family'),
     url(r'^edit_camper/(?P<camper_id>[0-9]+)/$', views.edit_camper, name='edit_camper'),
 
     # url(r'^api_campers/(?P<family_id>[0-9]+)/$', views.api_campers, name='api_campers'),

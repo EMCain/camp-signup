@@ -1,0 +1,3 @@
+{
+'first_name' : 'family.user.first_name', 'last_name' : 'family.user.last_name', 'email' : 'family.user.email', 'email' : 'family.user.username', 'phone' : 'family.phone', 'street_address' : 'family.street_address', 'apt_no' : 'family.apt_no', 'city' : 'family.city', 'state' : 'family.state', 'zip_code' : 'family.zip_code', 'ec_1_first' : 'family.ec_1_first', 'ec_1_last' : 'family.ec_1_last', 'ec_1_phone' : 'family.ec_1_phone', 'ec_1_relation' : 'family.ec_1_relation', 'ec_2_first' : 'family.ec_2_first', 'ec_2_last' : 'family.ec_2_last', 'ec_2_phone' : 'family.ec_2_phone', 'ec_2_relation' : 'family.ec_2_relation'
+}
