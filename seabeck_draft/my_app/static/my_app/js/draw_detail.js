@@ -16,6 +16,8 @@ function changeAttendanceStatus(e) {
     saveCamper(camper, "changeAtnd");
 }
 
+function newCamper(){}
+
 function saveCamper(camper, action) {
 
     var fd = new FormData();
