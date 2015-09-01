@@ -6,7 +6,6 @@
 graderequest = new XMLHttpRequest();
 //var menuTimeout;
 
-window.gradeFillNeeded = true;
 
 function fillGrades(){
     console.log("starting fillGrades");
@@ -16,8 +15,8 @@ function fillGrades(){
     for(var i =0; i < menus.length; i++){
         var menu = menus[i];
 
-        for(var grade_index in window.grades_data){
-            var grade = window.grades_data[grade_index];
+        for(var j = 0; j < window.grades_data.length; j++){
+            var grade = window.grades_data[j];
             var opt = document.createElement("option");
             opt.setAttribute("value", grade['code']);
             opt.innerHTML = grade['name'];
@@ -32,7 +31,6 @@ function getGrades(){
     //    console.log("starting getGrades");
         //try {
             window.grades_data = JSON.parse(graderequest.responseText);
-            window.gradeFillNeeded = false;
             fillGrades();
             fetchCampersGrade(); //not sure if this is the right place
     //    } catch (e) {

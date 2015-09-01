@@ -86,35 +86,68 @@ def logout_view(request):
 @login_required(login_url='/login_needed/')
 def index(request):
     family = get_object_or_404(Family, user=request.user)
-
-    if request.POST:
-        print(request.POST)
-        family.user.first_name = request.POST["first_name"]
-        family.user.last_name = request.POST["last_name"]
-        family.user.email = request.POST["email"]
-        family.user.username = request.POST["email"]
-        family.phone = request.POST["phone"]
-
-        family.street_address = request.POST["street_address"]
-        family.apt_no = request.POST["apt_no"]
-        family.city = request.POST["city"]
-        family.state = request.POST["state"]
-        family.zip_code = request.POST["zip_code"]
-
-        family.ec_1_first = request.POST["ec_1_first"]
-        family.ec_1_last = request.POST["ec_1_last"]
-        family.ec_1_phone = request.POST["ec_1_phone"]
-        family.ec_1_relation = request.POST["ec_1_relation"]
-
-        family.ec_2_first = request.POST["ec_2_first"]
-        family.ec_2_last = request.POST["ec_2_last"]
-        family.ec_2_phone = request.POST["ec_2_phone"]
-        family.ec_2_relation = request.POST["ec_2_relation"]
-
-        family.save()
-        return HttpResponseRedirect("/")
+    #
+    # if request.POST:
+    #     print(request.POST)
+    #     family.user.first_name = request.POST["first_name"]
+    #     family.user.last_name = request.POST["last_name"]
+    #     family.user.email = request.POST["email"]
+    #     family.user.username = request.POST["email"]
+    #     family.phone = request.POST["phone"]
+    #
+    #     family.street_address = request.POST["street_address"]
+    #     family.apt_no = request.POST["apt_no"]
+    #     family.city = request.POST["city"]
+    #     family.state = request.POST["state"]
+    #     family.zip_code = request.POST["zip_code"]
+    #
+    #     family.ec_1_first = request.POST["ec_1_first"]
+    #     family.ec_1_last = request.POST["ec_1_last"]
+    #     family.ec_1_phone = request.POST["ec_1_phone"]
+    #     family.ec_1_relation = request.POST["ec_1_relation"]
+    #
+    #     family.ec_2_first = request.POST["ec_2_first"]
+    #     family.ec_2_last = request.POST["ec_2_last"]
+    #     family.ec_2_phone = request.POST["ec_2_phone"]
+    #     family.ec_2_relation = request.POST["ec_2_relation"]
+    #
+    #     family.save()
+    #     return HttpResponseRedirect("/")
 
     return render(request, 'seabeck_draft/index.html', {'family': family})
+
+
+
+@login_required(login_url='/login_needed/')
+def api_family(request):
+    family = get_object_or_404(Family, user=request.user)
+
+    output = []
+
+    family = {
+        'first_name' : family.user.first_name,
+        'last_name' : family.user.last_name,
+        'email' : family.user.email,
+        'phone' : family.phone,
+        'street_address' : family.street_address,
+        'apt_no' : family.apt_no,
+        'city' : family.city,
+        'state' : family.state,
+        'zip_code' : family.zip_code,
+        'ec_1_first' : family.ec_1_first,
+        'ec_1_last' : family.ec_1_last,
+        'ec_1_phone' : family.ec_1_phone,
+        'ec_1_relation' : family.ec_1_relation,
+        'ec_2_first' : family.ec_2_first,
+        'ec_2_last' : family.ec_2_last,
+        'ec_2_phone' : family.ec_2_phone,
+        'ec_2_relation' : family.ec_2_relation
+    }
+
+    output.append(family)
+
+
+    return HttpResponse(json.dumps(output, indent=4), content_type="application/json")
 
 
 
@@ -201,24 +234,27 @@ def update_camper(request):
 
         else:
             camper = get_object_or_404(Camper, id=id)
-            atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
-
+            try:
+                atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
+            except IndexError:
+                print "not attending this year"
 
 
         grades = Grade.objects.all()
 
-        print "attn is", atnd
-
-        if "action" in request.POST:
-            if request.POST.get("action") == "delete":
-                camper.delete()
+        #
+        # if "action" in request.POST:
+        #     print "deleting camper" + str(camper)
+        #     if request.POST.get("action") == "delete":
+        #         camper.delete()
+        #         return HttpResponse("camper deleted")
 
         if "dob" in request.POST:
             camper.dob = datetime.datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
-        # if "last_name" in request.POST:
-        #     user.last_name = request.POST.get("last_name")
-        # if "bio" in request.POST:
-        #     dancer.bio = request.POST.get("bio")
+
+
+
+
 
         if "first_name" in request.POST:
             camper.first_name = request.POST.get("first_name");
@@ -267,10 +303,23 @@ def update_camper(request):
             gradecode = request.POST.get("grade_code")
             atnd.grade = grades.filter(code=int(gradecode))[0]
 
+
+
         camper.save()
         atnd.save()
 
-    return HttpResponse(str(camper.id))
+        if "action" in request.POST:
+            print "deleting camper" + str(camper)
+            if request.POST.get("action") == "delete":
+                camper.delete()
+                try:
+                    atnd.delete()
+                except IndexError:
+                    print "no attendence to delete"
+                return HttpResponse("camper deleted")
+
+
+        return HttpResponse(str(camper.id))
 
 @csrf_exempt
 def change_attendance(request):
@@ -349,37 +398,80 @@ def new_family(request):
 
     return render(request, 'seabeck_draft/new_family.html', {'family': family})
 
-
+@csrf_exempt
 def update_family(request):
     family = get_object_or_404(Family, user=request.user)
 
     if request.POST:
         print(request.POST)
 
-        family.user.first_name = request.POST["first_name"]
-        family.user.last_name = request.POST["last_name"]
-        family.user.email = request.POST["email"]
-        family.user.username = request.POST["email"]
-        family.phone = request.POST["phone"]
 
-        family.street_address = request.POST["street_address"]
-        family.apt_no = request.POST["apt_no"]
-        family.city = request.POST["city"]
-        family.state = request.POST["state"]
-        family.zip_code = request.POST["zip_code"]
+        family_fields_dict = {
+            'first_name' : family.user.first_name,
+            'last_name' : family.user.last_name,
+            'email' : family.user.email,
+            'email' : family.user.username,
+            'phone' : family.phone,
+            'street_address' : family.street_address,
+            'apt_no' : family.apt_no,
+            'city' : family.city,
+            'state' : family.state,
+            'zip_code' : family.zip_code,
+            'ec_1_first' : family.ec_1_first,
+            'ec_1_last' : family.ec_1_last,
+            'ec_1_phone' : family.ec_1_phone,
+            'ec_1_relation' : family.ec_1_relation,
+            'ec_2_first' : family.ec_2_first,
+            'ec_2_last' : family.ec_2_last,
+            'ec_2_phone' : family.ec_2_phone,
+            'ec_2_relation' : family.ec_2_relation
+        }
 
-        family.ec_1_first = request.POST["ec_1_first"]
-        family.ec_1_last = request.POST["ec_1_last"]
-        family.ec_1_phone = request.POST["ec_1_phone"]
-        family.ec_1_relation = request.POST["ec_1_relation"]
+        for attribute in family_fields_dict:
+            if attribute in request.POST:
+                family_fields_dict[attribute] = request.POST[attribute]
+                family.save()
+        if "first_name" in request.POST:
+            family.user.first_name = request.POST["first_name"]
+        if "last_name" in request.POST:
+            family.user.last_name = request.POST["last_name"]
+        if "email" in request.POST:
+            family.user.email = request.POST["email"]
+            family.user.username = request.POST["email"]
+        if "phone" in request.POST:
+            family.phone = request.POST["phone"]
 
-        family.ec_2_first = request.POST["ec_2_first"]
-        family.ec_2_last = request.POST["ec_2_last"]
-        family.ec_2_phone = request.POST["ec_2_phone"]
-        family.ec_2_relation = request.POST["ec_2_relation"]
+        if "street_address" in request.POST:
+            family.street_address = request.POST["street_address"]
+        if "apt_no" in request.POST:
+            family.apt_no = request.POST["apt_no"]
+        if "city" in request.POST:
+            family.city = request.POST["city"]
+        if "state" in request.POST:
+            family.state = request.POST["state"]
+        if "zip_code" in request.POST:
+            family.zip_code = request.POST["zip_code"]
+
+        if "ec_1_first" in request.POST:
+            family.ec_1_first = request.POST["ec_1_first"]
+        if "ec_1_last" in request.POST:
+            family.ec_1_last = request.POST["ec_1_last"]
+        if "ec_1_phone" in request.POST:
+            family.ec_1_phone = request.POST["ec_1_phone"]
+        if "ec_1_relation" in request.POST:
+            family.ec_1_relation = request.POST["ec_1_relation"]
+
+        if "ec_2_first" in request.POST:
+            family.ec_2_first = request.POST["ec_2_first"]
+        if "ec_2_last" in request.POST:
+            family.ec_2_last = request.POST["ec_2_last"]
+        if "ec_2_phone" in request.POST:
+            family.ec_2_phone = request.POST["ec_2_phone"]
+        if "ec_2_relation" in request.POST:
+            family.ec_2_relation = request.POST["ec_2_relation"]
 
         family.save()
-        return HttpResponseRedirect("/")
+        #return HttpResponseRedirect("/")
 
     return render(request, 'seabeck_draft/index.html', {'family': family})
 

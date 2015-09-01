@@ -70,6 +70,9 @@ function saveCamper(camper, action) {
     }
 
     if (action == "delete") {
+
+        var url = "/update_camper/"
+
         fd.append("id", camper["id"]);
         fd.append("action", "delete");
 
@@ -78,7 +81,7 @@ function saveCamper(camper, action) {
     var saveRequest = new XMLHttpRequest();
     saveRequest.open("POST", url, true);
 
-    if(action == "changeAtnd" || camper["id"] ==0){
+    if(action == "changeAtnd" || camper["id"] ==0 || action =="delete"){
         saveRequest.onload = fetchCampers
     }
 
@@ -191,9 +194,8 @@ function addDeleteListener(e){
     var id = e.getAttribute("data-id");
     var camper = getCamperById(id);
     e.addEventListener("click", function(){
-        if(document.confirm("Are you sure you want to delete the camper record for " + camper.first_name + " " + camper.last_name + "?")){
+        if(window.confirm("Are you sure you want to delete the camper record for " + camper.first_name + " " + camper.last_name + "?")){
             saveCamper(camper, "delete");
-            drawCampers();
         }
 
 
@@ -211,6 +213,8 @@ function onRequestChange() { //more descriptive name
         drawCampers();
         //fetchGrades("/api_grades/");
         newCamperListener(document.getElementById("new-camper-button"));
+    } else {
+
     }
 }
 
@@ -219,7 +223,12 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
     //then call that function when an attendence is added/removed
 
     var listdiv = document.getElementById("campers-list");
-    listdiv.innerHTML = "";
+
+    if (window.campers_data.length == 0){
+        listdiv.innerHTML = "There are no camper records. Please add campers below."
+    } else {
+        listdiv.innerHTML = "";
+    }
 
     var cof_container = document.createElement("div");
     cof_container.setAttribute("class", "container");
@@ -319,6 +328,8 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
         delete_camper_button.innerHTML = "delete";
 
         addDeleteListener(delete_camper_button);
+
+        button_col_2.appendChild(delete_camper_button);
 
         //create listener with confirm, delete if true
 
@@ -444,10 +455,10 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
         //var current_element = document.getElementById("dob_field_1");
         //
         //current_element.value = window.campers_data[item]["dob"];
-        fetchGrades("/api_grades/");
 
 
     }
+        fetchGrades("/api_grades/");
 
 
 }

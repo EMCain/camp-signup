@@ -16,6 +16,13 @@ body * {
     margin:0;
 }
 
+h1, h2, h3 {
+    text-align: left;
+}
+h3 {
+    font-style: italic;
+}
+
 header {
     background-color: #FDFAE7;
     color: #A7B986;

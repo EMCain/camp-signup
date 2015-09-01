@@ -67,4 +67,15 @@ function fillMenu(state_value){
     console.log("adding option for " + abbrev);
     states_menu.appendChild(option);
   }
+    states_menu.addEventListener("change", onSelectState)
 }
+
+function onSelectState(e) {
+    var selected = this.value;
+    //send selected to update_family
+    //need to change update_family to a conditional loop
+    //try with update_camper first
+
+}
+
+function fetchFamily(){}//need to create an api family
