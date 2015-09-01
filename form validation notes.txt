@@ -1,0 +1,20 @@
+validations needed for seabeck app -- regex
+
+First and last names, other general text fields:
+characters: A-Z, a-z, ', ., -, space, (), "
+length: > 1, <= 50
+regex: 
+
+
+
+
+phone numbers:
+formats: 10 digits, ddd.ddd.dddd, (ddd)ddd-dddd, ddd-ddd-dddd
+regex:
+
+date of birth:
+formats: mm/dd/yyyy, mm-dd-yyyy, mm.dd.yyyy (change how I convert dates to reflect this order)
+
+zip: 
+format: exactly 5 digits
+

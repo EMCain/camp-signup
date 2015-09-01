@@ -37,7 +37,7 @@
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">First name:</span>
-                        <input value="{{ family.user.first_name }}" class="form-control"
+                        <input class="form-control"
                                name="first_name" type="text">
 
                     </div>
@@ -46,7 +46,7 @@
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">Last name: </span>
-                        <input value="{{ family.user.last_name }}" class="form-control"
+                        <input class="form-control"
                                name="last_name" type="text">
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                         <span class="input-group-addon">
 
             Phone number:</span>
-                        <input value="{{ family.phone }}" class="form-control" name="phone" type="text">
+                        <input class="form-control" name="phone" type="text">
 
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">
                 Email address:</span>
-                        <input value="{{ family.user.email }}" class="form-control" name="email" type="text">
+                        <input class="form-control" name="email" type="text">
                         {#make sure if the email address changes it gets POSTed to the username as well#}
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">
             Street: </span>
-                        <input class="form-control" value="{{ family.street_address }}"
+                        <input class="form-control"
                                name="street_address" type="text">
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">
-                    Apartment/suite:</span> <input class="form-control" value="{{ family.apt_no }}"
+                    Apartment/suite:</span> <input class="form-control"
                                                    name="apt_no" type="text">
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                 <div class="col-lg-6">
                     <div class="input-group">
                         <span class="input-group-addon">
-                    City: </span><input class="form-control" value="{{ family.city }}" name="city" type="text">
+                    City: </span><input class="form-control" name="city" type="text">
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -114,7 +114,7 @@
                 <div class="col-lg-3">
                     <div class="input-group">
                         <span class="input-group-addon">
-                Zip: </span><input class="form-control" value="{{ family.zip_code }}" name="zip_code" type="text">
+                Zip: </span><input class="form-control" name="zip_code" type="text">
                     </div>
                 </div>
             </div>
@@ -147,13 +147,13 @@
                 <div class="col-lg-6">
                     <div class="input-group">
                 <span class="input-group-addon">
-                Phone: </span><input class="form-control" value="{{ family.ec_1_phone }}" name="ec_1_phone" type="text">
+                Phone: </span><input class="form-control" name="ec_1_phone" type="text">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
                 <span class="input-group-addon">
-                Relationship: </span><input class="form-control" value="{{ family.ec_1_relation }}" name="ec_1_relation"
+                Relationship: </span><input class="form-control" name="ec_1_relation"
                                             type="text">
                     </div>
                 </div>
@@ -166,7 +166,7 @@
 
                     <div class="input-group">
                 <span class="input-group-addon">
-            First Name: </span><input class="form-control" value="{{ family.ec_2_first }}" name="ec_2_first"
+            First Name: </span><input class="form-control"  name="ec_2_first"
                                       type="text">
                     </div>
                 </div>
@@ -174,7 +174,7 @@
 
                     <div class="input-group">
                 <span class="input-group-addon">
-            Last Name: </span><input class="form-control" value="{{ family.ec_2_last }}" name="ec_2_last" type="text">
+            Last Name: </span><input class="form-control"  name="ec_2_last" type="text">
                     </div>
                 </div>
             </div>
@@ -182,13 +182,13 @@
                 <div class="col-lg-6">
                     <div class="input-group">
                 <span class="input-group-addon">
-                Phone: </span><input class="form-control" value="{{ family.ec_2_phone }}" name="ec_2_phone" type="text">
+                Phone: </span><input class="form-control" name="ec_2_phone" type="text">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="input-group">
                 <span class="input-group-addon">
-                Relationship: </span><input class="form-control" value="{{ family.ec_2_relation }}" name="ec_2_relation"
+                Relationship: </span><input class="form-control"  name="ec_2_relation"
                                             type="text">
                     </div>
                 </div>
