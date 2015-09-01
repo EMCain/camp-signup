@@ -52,7 +52,7 @@ class Camper(models.Model):
     family = models.ForeignKey(Family)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    under_18 = models.BooleanField()
+    under_18 = models.BooleanField(default=False)
     dob = models.DateField(null=True, blank=True)
 
     is_vegetarian = models.BooleanField(default=False)

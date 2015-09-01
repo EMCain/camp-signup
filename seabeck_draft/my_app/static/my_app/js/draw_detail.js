@@ -11,12 +11,33 @@ function getCamperById(id) {
 }
 
 function changeAttendanceStatus(e) {
+    console.log("changeAttendanceStatus");
+    console.log(this);
+    console.log(e);
+    console.log(e.target);
     var id = this.getAttribute("data-id");
     var camper = getCamperById(id);
     saveCamper(camper, "changeAtnd");
 }
 
-function newCamper(){}
+function newCamper(firstname, lastname) {
+    var new_camper = {"id": 0, "first_name": firstname, "last_name": lastname};
+    saveCamper(new_camper, "update");
+
+}
+
+function addNewCamper() {
+    var first_name_field = document.getElementById("new_first_name");
+    var last_name_field = document.getElementById("new_last_name");
+    var first_name = first_name_field.value;
+    var last_name = last_name_field.value;
+    newCamper(first_name, last_name);
+}
+
+function newCamperListener(el) {
+    el.addEventListener("click", addNewCamper);
+}
+
 
 function saveCamper(camper, action) {
 
@@ -48,13 +69,19 @@ function saveCamper(camper, action) {
         }
     }
 
+    if (action == "delete") {
+        fd.append("id", camper["id"]);
+        fd.append("action", "delete");
+
+    }
+
     var saveRequest = new XMLHttpRequest();
     saveRequest.open("POST", url, true);
 
-
-    if (action == "changeAtnd") {
+    if(action == "changeAtnd" || camper["id"] ==0){
         saveRequest.onload = fetchCampers
     }
+
 
     saveRequest.send(fd);
 
@@ -160,6 +187,20 @@ function addCheckboxListener(camper, el) {
 }
 
 
+function addDeleteListener(e){
+    var id = e.getAttribute("data-id");
+    var camper = getCamperById(id);
+    e.addEventListener("click", function(){
+        if(document.confirm("Are you sure you want to delete the camper record for " + camper.first_name + " " + camper.last_name + "?")){
+            saveCamper(camper, "delete");
+            drawCampers();
+        }
+
+
+    })
+
+}
+
 function onRequestChange() { //more descriptive name
     console.log(request.readyState, request.status);
     if ((request.readyState == 4) && (request.status == 200)) {
@@ -168,7 +209,8 @@ function onRequestChange() { //more descriptive name
         // todo change var campers_data to window.campers
         console.log(window.campers_data);
         drawCampers();
-        fetchGrades("/api_grades/");
+        //fetchGrades("/api_grades/");
+        newCamperListener(document.getElementById("new-camper-button"));
     }
 }
 
@@ -224,18 +266,18 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
 
         console.log("creating large column")
         var static_name_column = document.createElement("div");
-        static_name_column.setAttribute("class", "col-md-5");
+        static_name_column.setAttribute("class", "col-md-6");
         static_name_row.appendChild(static_name_column);
 
         //declaring string static_name_string here for the static row
-        var static_name_string = window.campers_data[i].name;
+        //var static_name_string = window.campers_data[i].name;
 
-        static_name_string += " - ";
+        var static_name_string = camper.first_name + " " + camper.last_name + " - ";
 
         //depending on whether the person is attending, makes it say "attending" or "not attending"
 
         if (!window.campers_data[i].in_current_year) {
-            static_name_string += " not";
+            static_name_string += "not";
         }
 
         static_name_string += " attending this year ";
@@ -245,12 +287,13 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
 
         //assigns button text depending on what it will do
 
-        var buttons_column = document.createElement("div");
-        buttons_column.setAttribute("class", "col-md-5");
-        static_name_row.appendChild(buttons_column);
+        var button_col_1 = document.createElement("div");
+        button_col_1.setAttribute("class", "col-md-3");
+        static_name_row.appendChild(button_col_1);
 
         console.log("creating button");
         var attend_status_button = document.createElement("button");
+        attend_status_button.setAttribute("id", "attend_button_"+id);
         attend_status_button.setAttribute("data-id", id);
 
 
@@ -263,7 +306,22 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
 
         attend_status_button.addEventListener("click", changeAttendanceStatus);
 
-        buttons_column.appendChild(attend_status_button);
+        button_col_1.appendChild(attend_status_button);
+
+
+        var button_col_2 = document.createElement("div");
+        button_col_2.setAttribute("class", "col-md-3");
+        static_name_row.appendChild(button_col_2);
+
+        var delete_camper_button = document.createElement("button");
+        delete_camper_button.setAttribute("id", "delete_button"+id);
+        delete_camper_button.setAttribute("data-id", id);
+        delete_camper_button.innerHTML = "delete";
+
+        addDeleteListener(delete_camper_button);
+
+        //create listener with confirm, delete if true
+
 
 
         //creates the food form section. Will eventually create a name change section above that
@@ -272,7 +330,7 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
         var food_row = document.createElement("div");
         food_row.setAttribute("class", "row food-row");
         food_row.setAttribute("id", "food_row_" + id);
-        camper_info.appendChild(food_row)
+        camper_info.appendChild(food_row);
 
 
         var food_needs = ["vegetarian", "vegan", "gf", "df"];
@@ -386,6 +444,7 @@ function drawCampers() { //separate out the drawing of a given camper as a separ
         //var current_element = document.getElementById("dob_field_1");
         //
         //current_element.value = window.campers_data[item]["dob"];
+        fetchGrades("/api_grades/");
 
 
     }

@@ -142,7 +142,8 @@ def api_campers(request):
 
         camper = {
             "id": camper.id,
-            "name": camper.first_name + " " + camper.last_name,
+            "first_name": camper.first_name,
+            "last_name": camper.last_name,
             "in_current_year": in_current_year,
             "under_18": camper.under_18,
             "is_vegetarian": camper.is_vegetarian,
@@ -186,20 +187,31 @@ def update_camper(request):
         print(request.POST)
 
         id = int(request.POST.get("id"))
+        years = EventYear.objects.all()
+        current_year = list(reversed(years))[0]
 
         if id == 0:
             camper = Camper()
+            camper.family = get_object_or_404(Family, user=request.user)
+            camper.save()
+            atnd = Attendance()
+            atnd.camper = camper
+            atnd.event_year = current_year
+
 
         else:
             camper = get_object_or_404(Camper, id=id)
+            atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
 
-        years = EventYear.objects.all()
-        current_year = list(reversed(years))[0]
-        atnd = Attendance.objects.filter(camper=camper, event_year=current_year)[0]
+
 
         grades = Grade.objects.all()
 
         print "attn is", atnd
+
+        if "action" in request.POST:
+            if request.POST.get("action") == "delete":
+                camper.delete()
 
         if "dob" in request.POST:
             camper.dob = datetime.datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
@@ -207,6 +219,12 @@ def update_camper(request):
         #     user.last_name = request.POST.get("last_name")
         # if "bio" in request.POST:
         #     dancer.bio = request.POST.get("bio")
+
+        if "first_name" in request.POST:
+            camper.first_name = request.POST.get("first_name");
+
+        if "last_name" in request.POST:
+            camper.last_name = request.POST.get("last_name");
 
         if "is_vegetarian" in request.POST:
             print "is_vegetarian is in request.post!!!"
